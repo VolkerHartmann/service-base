@@ -1,13 +1,16 @@
 package edu.kit.datamanager.service;
 
 import edu.kit.datamanager.entities.VersionInfo;
+import edu.kit.datamanager.configuration.RepoBaseConfiguration;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Map;
 
-public interface IVersioningService{
-
-  void configure();
+public interface IRepoVersioningService{
+  /** 
+   * Configure the service.
+   */
+  void configure(RepoBaseConfiguration applicationProperties);
 
   /**
    * adds the file of an object to the default OCFL repository.

@@ -17,8 +17,9 @@ package edu.kit.datamanager.service.impl;
 
 import edu.kit.datamanager.entities.ContentElement;
 import edu.kit.datamanager.exceptions.CustomInternalServerError;
+import edu.kit.datamanager.service.IRepoVersioningService;
 import edu.kit.datamanager.service.IContentProvider;
-import edu.kit.datamanager.service.IVersioningService;
+import edu.kit.datamanager.service.IRepoVersioningService;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
@@ -40,7 +41,7 @@ public class FileContentProvider implements IContentProvider{
   @Autowired
   private Logger logger;
   @Autowired(required = false)
-  private IVersioningService[] versioningServices;
+  private IRepoVersioningService[] versioningServices;
 
   @Override
   public void provide(ContentElement contentElement, MediaType mediaType, String filename, HttpServletResponse response){
@@ -52,10 +53,9 @@ public class FileContentProvider implements IContentProvider{
     logger.trace("Providing content element {}.", contentElement);
     try{
       logger.trace("Checking for proper versioning service named {}.", contentElement.getVersioningService());
-      for(IVersioningService versioningService : versioningServices){
+      for(IRepoVersioningService versioningService : versioningServices){
         if(versioningService.getServiceName().equals(contentElement.getVersioningService())){
           logger.trace("Versioning service found. Building response.");
-          versioningService.configure();
           response.setStatus(HttpStatus.OK.value());
           if(mediaType != null){
             response.setHeader("Content-Type", mediaType.toString());

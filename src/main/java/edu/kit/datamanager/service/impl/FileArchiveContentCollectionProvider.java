@@ -18,7 +18,6 @@ package edu.kit.datamanager.service.impl;
 import edu.kit.datamanager.entities.ContentElement;
 import edu.kit.datamanager.exceptions.CustomInternalServerError;
 import edu.kit.datamanager.service.IContentCollectionProvider;
-import edu.kit.datamanager.service.IVersioningService;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -33,6 +32,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.UnsupportedMediaTypeStatusException;
+import edu.kit.datamanager.service.IRepoVersioningService;
 
 /**
  *
@@ -45,7 +45,7 @@ public class FileArchiveContentCollectionProvider implements IContentCollectionP
 
   public final static MediaType ZIP_MEDIA_TYPE = MediaType.parseMediaType("application/zip");
   @Autowired(required = false)
-  private IVersioningService[] versioningServices;
+  private IRepoVersioningService[] versioningServices;
 
   @Override
   public void provide(@NotEmpty List<ContentElement> collection, MediaType mediaType, HttpServletResponse response){
@@ -79,10 +79,8 @@ public class FileArchiveContentCollectionProvider implements IContentCollectionP
         LOGGER.trace("Writing element to zip stream.");
         zippedOut.putNextEntry(e);
 
-        for(IVersioningService versioningService : versioningServices){
+        for(IRepoVersioningService versioningService : versioningServices){
           if(element.getVersioningService().equals(versioningService.getServiceName())){
-            versioningService.configure();
-
             Map<String, String> options = new HashMap<>();
             options.put("contentUri", element.getContentUri());
             options.put("checksum", element.getChecksum());

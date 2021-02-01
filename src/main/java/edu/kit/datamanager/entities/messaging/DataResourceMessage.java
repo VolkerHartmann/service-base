@@ -18,12 +18,14 @@ package edu.kit.datamanager.entities.messaging;
 import java.util.HashMap;
 import java.util.Map;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 /**
  *
  * @author jejkal
  */
 @Data
+@EqualsAndHashCode(callSuper=false)
 public class DataResourceMessage extends BasicMessage{
 
   public enum ACTION{
