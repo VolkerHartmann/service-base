@@ -59,7 +59,7 @@ dependencies {
     implementation "org.springframework.boot:spring-boot-starter-security"
     implementation "org.springframework.boot:spring-boot-starter-actuator"
     implementation "org.springframework.boot:spring-boot-starter-data-jpa"
-    implementation "org.springframework.cloud:spring-cloud-gateway-mvc:3.1.4"
+    implementation "org.springframework.cloud:spring-cloud-gateway-mvc:4.0.4"
 
     implementation "org.springdoc:springdoc-openapi-ui:${springDocVersion}"
     implementation "org.springdoc:springdoc-openapi-data-rest:${springDocVersion}"
