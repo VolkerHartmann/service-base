@@ -76,7 +76,7 @@ dependencies {
     //keycloak
     implementation "com.nimbusds:nimbus-jose-jwt:9.37.3"
     implementation "io.jsonwebtoken:jjwt-api:0.12.4"
-    implementation "io.jsonwebtoken:jjwt-impl:0.12.4"
+    implementation "io.jsonwebtoken:jjwt-impl:0.12.5"
     implementation "io.jsonwebtoken:jjwt-jackson:0.12.4"
 
     implementation "com.github.java-json-tools:json-patch:1.13"
