@@ -50,6 +50,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import javax.crypto.SecretKey;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -198,7 +199,7 @@ public class KeycloakTokenValidator {
     }
 
     protected Jws<Claims> getJwsClaims(String accessToken) {
-        return Jwts.parser().setSigningKey(jwtLocalSecret).build().parseClaimsJws(accessToken);
+        return Jwts.parser().verifyWith(new SecretKey(jwtLocalSecret)).build().parseClaimsJwt(accessToken);
     }
 
     public boolean supportsLocalJwt() {
