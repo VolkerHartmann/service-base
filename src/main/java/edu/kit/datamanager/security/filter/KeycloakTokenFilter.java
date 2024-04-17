@@ -183,7 +183,7 @@ public class KeycloakTokenFilter extends OncePerRequestFilter {
         } catch (IllegalArgumentException ex) {
             LOG.debug("Illegal argument exception while local authentication attempt.", ex);
         } catch (UnsupportedJwtException ex) {
-            LOG.debug("Unsupported JwtException while local authentication attempt.", e);
+            LOG.debug("Unsupported JwtException while local authentication attempt.", ex);
         }
         return authenticated;
     }
