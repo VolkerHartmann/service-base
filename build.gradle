@@ -69,7 +69,7 @@ dependencies {
     implementation "com.fasterxml.jackson.module:jackson-module-afterburner:2.17.0"
 
     implementation "com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.17.0"
-    implementation "com.fasterxml.jackson.datatype:jackson-datatype-joda:2.17.0"
+    implementation "com.fasterxml.jackson.datatype:jackson-datatype-joda:2.17.1"
    
     implementation "com.github.dozermapper:dozer-core:7.0.0"
 
