@@ -26,6 +26,8 @@ plugins {
     id "net.researchgate.release" version "3.0.2"
     id "io.github.gradle-nexus.publish-plugin" version "2.0.0"
     id 'maven-publish'
+    // datacite
+    id 'de.qaware.gradle.plugin.xsd2java' version '4.0.0'
 }
 
 ext { 
@@ -50,6 +52,19 @@ println "JDK version: ${JavaVersion.current()}"
 repositories {
     mavenLocal()   
     mavenCentral()
+}
+
+xsd2java {
+    schemas {
+        metadata {
+            schemaDirPath 'src/main/resources/xsd/datacite4.6'
+            packageName 'de.qaware.gradle.plugin.xsd2java.dummy.xsd'
+        }
+    }
+    
+    extension true
+    arguments ['-verbose']
+    outputDir file("${project.buildDir}/generated-sources/xsd2java")
 }
 
 dependencies {
@@ -93,14 +108,17 @@ dependencies {
     implementation "com.fasterxml.jackson.core:jackson-databind:2.18.2"
    
     //Java 11 Support 
-    implementation 'javax.xml.bind:jaxb-api:2.3.1'
+//    implementation 'javax.xml.bind:jaxb-api:2.3.1'
     
-    implementation 'com.sun.xml.bind:jaxb-core:4.0.5'
-    implementation 'com.sun.xml.bind:jaxb-impl:4.0.5'
+//    implementation 'com.sun.xml.bind:jaxb-core:4.0.5'
+//    implementation 'com.sun.xml.bind:jaxb-impl:4.0.5'
 
     implementation 'javax.activation:activation:1.1.1'
     implementation 'org.javassist:javassist:3.30.2-GA'
    
+    // https://mvnrepository.com/artifact/org.glassfish.jaxb/jaxb-runtime
+    implementation 'org.glassfish.jaxb:jaxb-runtime:4.0.5'
+    
     //test
     testImplementation "org.springframework.boot:spring-boot-starter-test"
     testImplementation "junit:junit:4.13.2"
