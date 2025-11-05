@@ -65,7 +65,7 @@ dependencies {
     implementation "org.springdoc:springdoc-openapi-starter-webmvc-api:${springDocVersion}"
 
     implementation "com.fasterxml.jackson.jaxrs:jackson-jaxrs-json-provider:2.20.0"
-    implementation "com.fasterxml.jackson.module:jackson-module-afterburner:2.20.0"
+    implementation "com.fasterxml.jackson.module:jackson-module-afterburner:2.20.1"
 
     implementation "com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.20.0"
     implementation "com.fasterxml.jackson.datatype:jackson-datatype-joda:2.20.0"
