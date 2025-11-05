@@ -90,7 +90,7 @@ dependencies {
 
     // due to problems in dependencies check
     implementation "com.fasterxml.jackson.core:jackson-core:2.20.1"
-    implementation "com.fasterxml.jackson.core:jackson-databind:2.20.0"
+    implementation "com.fasterxml.jackson.core:jackson-databind:2.20.1"
    
     //Java 11 Support 
     implementation 'javax.xml.bind:jaxb-api:2.3.1'
