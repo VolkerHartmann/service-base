@@ -189,7 +189,7 @@ public class SimpleServiceClient {
         //overwriting filename required by spring (see https://medium.com/@voziv/posting-a-byte-array-instead-of-a-file-using-spring-s-resttemplate-56268b45140b)
         @Override
         public String getFilename() {
-          return "stream#" + UUID.randomUUID().toString();
+          return "stream#" + UUID.randomUUID();
         }
       });
     } else {
@@ -199,7 +199,7 @@ public class SimpleServiceClient {
         //overwriting filename required by spring (see https://medium.com/@voziv/posting-a-byte-array-instead-of-a-file-using-spring-s-resttemplate-56268b45140b)
         @Override
         public String getFilename() {
-          return "metadata#" + UUID.randomUUID().toString() + ".json";
+          return "metadata#" + UUID.randomUUID() + ".json";
         }
       });
     }
