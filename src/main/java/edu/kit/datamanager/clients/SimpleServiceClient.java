@@ -229,7 +229,7 @@ public class SimpleServiceClient {
     C returnValue = null;
     LOGGER.trace("Calling getResource().");
     String destinationUri = resourceBaseUrl + ((resourcePath != null) ? resourcePath : "");
-    UriComponentsBuilder uriBuilder = UriComponentsBuilder.fromHttpUrl(destinationUri).queryParams(queryParams);
+    UriComponentsBuilder uriBuilder = UriComponentsBuilder.fromUriString(destinationUri).queryParams(queryParams);
     LOGGER.trace(OBTAINING_RESOURCE, uriBuilder.toUriString());
     ResponseEntity<C> response = restTemplate.exchange(uriBuilder.toUriString(), HttpMethod.GET, new HttpEntity<>(headers), responseType);
     HttpStatusCode statusCode = response.getStatusCode();
@@ -257,7 +257,7 @@ public class SimpleServiceClient {
     ResultPage<C> returnValue = null;
     LOGGER.trace("Calling getResources().");
     String destinationUri = resourceBaseUrl + ((resourcePath != null) ? resourcePath : "");
-    UriComponentsBuilder uriBuilder = UriComponentsBuilder.fromHttpUrl(destinationUri).queryParams(queryParams);
+    UriComponentsBuilder uriBuilder = UriComponentsBuilder.fromUriString(destinationUri).queryParams(queryParams);
     LOGGER.trace(OBTAINING_RESOURCE, uriBuilder.toUriString());
     ResponseEntity<C[]> response = restTemplate.exchange(uriBuilder.toUriString(), HttpMethod.GET, new HttpEntity<>(headers), responseType);
     HttpStatusCode statusCode = response.getStatusCode();
@@ -287,7 +287,7 @@ public class SimpleServiceClient {
   public <C> ResultPage<C> findResources(C resource, Class<C[]> responseType) {
     LOGGER.trace("Calling findResources().");
     String destinationUri = resourceBaseUrl + "search";
-    UriComponentsBuilder uriBuilder = UriComponentsBuilder.fromHttpUrl(destinationUri).queryParams(queryParams);
+    UriComponentsBuilder uriBuilder = UriComponentsBuilder.fromUriString(destinationUri).queryParams(queryParams);
     LOGGER.trace(OBTAINING_RESOURCE, uriBuilder.toUriString());
     ResponseEntity<C[]> response = restTemplate.exchange(uriBuilder.toUriString(), HttpMethod.POST, new HttpEntity<>(resource, headers), responseType);
     LOGGER.trace("Request returned with status {}. Returning response body.", response.getStatusCode().value());
@@ -305,7 +305,7 @@ public class SimpleServiceClient {
   public int getResource(OutputStream outputStream) {
     String sourceUri = resourceBaseUrl + ((resourcePath != null) ? resourcePath : "");
 
-    UriComponentsBuilder uriBuilder = UriComponentsBuilder.fromHttpUrl(sourceUri).queryParams(queryParams);
+    UriComponentsBuilder uriBuilder = UriComponentsBuilder.fromUriString(sourceUri).queryParams(queryParams);
     LOGGER.trace("Downloading content from source URI {}.", uriBuilder.toUriString());
 
     RequestCallback requestCallback = request -> {
@@ -345,7 +345,7 @@ public class SimpleServiceClient {
     LOGGER.trace("Calling createResource(#DataResource).");
 
     String destinationUri = resourceBaseUrl + ((resourcePath != null) ? resourcePath : "");
-    UriComponentsBuilder uriBuilder = UriComponentsBuilder.fromHttpUrl(destinationUri).queryParams(queryParams);
+    UriComponentsBuilder uriBuilder = UriComponentsBuilder.fromUriString(destinationUri).queryParams(queryParams);
 
     LOGGER.trace("Sending POST request for resource.");
     ResponseEntity<C> response = restTemplate.exchange(uriBuilder.toUriString(), HttpMethod.POST, new HttpEntity<>(resource, headers), responseType);
@@ -375,7 +375,7 @@ public class SimpleServiceClient {
 
     String destinationUri = resourceBaseUrl + ((resourcePath != null) ? resourcePath : "");
 
-    UriComponentsBuilder uriBuilder = UriComponentsBuilder.fromHttpUrl(destinationUri).queryParams(queryParams);
+    UriComponentsBuilder uriBuilder = UriComponentsBuilder.fromUriString(destinationUri).queryParams(queryParams);
 
     LOGGER.trace("Uploading content to destination URI {}.", uriBuilder.toUriString());
     ResponseEntity<String> response = restTemplate.postForEntity(uriBuilder.toUriString(), new HttpEntity<>(body, headers), String.class);
@@ -397,7 +397,7 @@ public class SimpleServiceClient {
     LOGGER.trace("Calling updateResource(#DataResource).");
 
     String destinationUri = resourceBaseUrl + ((resourcePath != null) ? resourcePath : "");
-    UriComponentsBuilder uriBuilder = UriComponentsBuilder.fromHttpUrl(destinationUri).queryParams(queryParams);
+    UriComponentsBuilder uriBuilder = UriComponentsBuilder.fromUriString(destinationUri).queryParams(queryParams);
     LOGGER.trace(OBTAINING_RESOURCE, uriBuilder.toUriString());
     ResponseEntity<C> response = restTemplate.exchange(uriBuilder.toUriString(), HttpMethod.GET, new HttpEntity<>(headers), responseType);
     LOGGER.trace("Reading ETag from response header.");
@@ -417,7 +417,7 @@ public class SimpleServiceClient {
   public void deleteResource() {
     LOGGER.trace("Calling delete().");
     String destinationUri = resourceBaseUrl + ((resourcePath != null) ? resourcePath : "");
-    UriComponentsBuilder uriBuilder = UriComponentsBuilder.fromHttpUrl(destinationUri).queryParams(queryParams);
+    UriComponentsBuilder uriBuilder = UriComponentsBuilder.fromUriString(destinationUri).queryParams(queryParams);
     LOGGER.trace(OBTAINING_RESOURCE, uriBuilder.toUriString());
     ResponseEntity<DataResource> response = restTemplate.exchange(uriBuilder.toUriString(), HttpMethod.GET, new HttpEntity<>(headers), DataResource.class);
     LOGGER.trace("Reading ETag from response header.");
