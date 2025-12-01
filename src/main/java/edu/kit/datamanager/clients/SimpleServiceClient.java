@@ -309,7 +309,7 @@ public class SimpleServiceClient {
     LOGGER.trace("Downloading content from source URI {}.", uriBuilder.toUriString());
 
     RequestCallback requestCallback = request -> {
-      Set<Entry<String, List<String>>> entries = headers.entrySet();
+      Set<Entry<String, List<String>>> entries = headers.headerSet();
       entries.forEach(
               entry -> request.getHeaders().addAll(entry.getKey(), entry.getValue())
       );
