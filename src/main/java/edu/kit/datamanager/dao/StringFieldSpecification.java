@@ -28,7 +28,7 @@ import org.springframework.data.jpa.domain.Specification;
 public class StringFieldSpecification<C>{
 
   public static <C> Specification<C> createSpecification(final String fieldName, String fieldValue, final boolean exactMatch){
-    Specification<C> newSpec = Specification.where(null);
+    Specification<C> newSpec = Specification.unrestricted();
     if(fieldName == null || fieldValue == null){
       return newSpec;
     }
@@ -45,7 +45,7 @@ public class StringFieldSpecification<C>{
   }
 
   public static <C> Specification<C> createSpecification(final String fieldName, String... fieldValues){
-    Specification<C> newSpec = Specification.where(null);
+    Specification<C> newSpec = Specification.unrestricted();
     if(fieldName == null || fieldValues == null || fieldValues.length == 0){
       return newSpec;
     }
