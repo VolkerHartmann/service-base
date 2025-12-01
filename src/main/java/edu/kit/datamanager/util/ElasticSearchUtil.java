@@ -74,14 +74,14 @@ public class ElasticSearchUtil {
             ResponseEntity<String> entity = restTemplate.getForEntity(accessUrl,
                     String.class,
                     baseUrl);
-            LOGGER.trace("Status code value: " + entity.getStatusCodeValue());
+            LOGGER.trace("Status code value: " + entity.getStatusCode().value());
             LOGGER.trace("HTTP Header 'ContentType': " + entity.getHeaders().getContentType());
-            if (entity.getStatusCodeValue() == HttpStatus.OK.value()) {
+            if (entity.getStatusCode().value() == HttpStatus.OK.value()) {
               LOGGER.info("Elasticsearch server at '{}' seems to be up and running!", baseUrl);
               validElasticSearchServer = true;
               break;
             } else {
-              LOGGER.debug("Invalid response from elasticsearch server. Expected HTTP 200, received HTTP " + entity.getStatusCodeValue() + ". Aborting.");
+              LOGGER.debug("Invalid response from elasticsearch server. Expected HTTP 200, received HTTP " + entity.getStatusCode().value() + ". Aborting.");
             }
           } catch (RestClientException ex) {
             LOGGER.warn("Failed accessing elasticsearch server.", ex);
