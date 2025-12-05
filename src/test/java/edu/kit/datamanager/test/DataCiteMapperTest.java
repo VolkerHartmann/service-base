@@ -24,7 +24,7 @@ import edu.kit.datamanager.entities.repo.Title;
 import edu.kit.datamanager.util.xml.DataCiteMapper;
 import java.time.Instant;
 import org.datacite.schema.kernel_4.Resource;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class DataCiteMapperTest{
 

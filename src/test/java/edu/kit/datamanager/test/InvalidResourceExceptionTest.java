@@ -16,8 +16,8 @@
 package edu.kit.datamanager.test;
 
 import edu.kit.datamanager.entities.dc40.exceptions.InvalidResourceException;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 /**
  *
@@ -32,8 +32,8 @@ public class InvalidResourceExceptionTest{
       try{
         throw new InvalidResourceException(error);
       } catch(InvalidResourceException e){
-        Assert.assertEquals(error, e.getType());
-        Assert.assertEquals(e.getMessage(), error.getMessage());
+        Assertions.assertEquals(error, e.getType());
+        Assertions.assertEquals(e.getMessage(), error.getMessage());
       }
     }
   }

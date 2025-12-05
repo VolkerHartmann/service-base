@@ -16,8 +16,8 @@
 package edu.kit.datamanager.test;
 
 import edu.kit.datamanager.entities.Identifier;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 /**
  *
@@ -28,9 +28,9 @@ public class IdentifierTest{
   @Test
   public void testInternalIdentifierWithValue(){
     Identifier id = Identifier.factoryInternalIdentifier("test123");
-    Assert.assertNull(id.getId());
-    Assert.assertEquals("test123", id.getValue());
-    Assert.assertEquals(Identifier.IDENTIFIER_TYPE.INTERNAL, id.getIdentifierType());
+    Assertions.assertNull(id.getId());
+    Assertions.assertEquals("test123", id.getValue());
+    Assertions.assertEquals(Identifier.IDENTIFIER_TYPE.INTERNAL, id.getIdentifierType());
   }
 
   @Test
@@ -39,56 +39,56 @@ public class IdentifierTest{
     Identifier id2 = Identifier.factoryInternalIdentifier("test123");
 
     //both should be equal as 'id' is still null
-    Assert.assertEquals(id1, id2);
-    Assert.assertEquals(id1.hashCode(), id2.hashCode());
+    Assertions.assertEquals(id1, id2);
+    Assertions.assertEquals(id1.hashCode(), id2.hashCode());
     //change id and check again
     id1.setId(Long.MIN_VALUE);
-    Assert.assertNotEquals(id1, id2);
+    Assertions.assertNotEquals(id1, id2);
   }
 
   @Test
   public void testInternalIdentifier(){
     Identifier id = Identifier.factoryInternalIdentifier();
 
-    Assert.assertNull(id.getId());
-    Assert.assertNotNull(id.getValue());
-    Assert.assertEquals(Identifier.IDENTIFIER_TYPE.INTERNAL, id.getIdentifierType());
+    Assertions.assertNull(id.getId());
+    Assertions.assertNotNull(id.getValue());
+    Assertions.assertEquals(Identifier.IDENTIFIER_TYPE.INTERNAL, id.getIdentifierType());
 
     Identifier id2 = Identifier.factoryInternalIdentifier();
     //should not be equal due to random identifier value
-    Assert.assertNotEquals(id, id2);
+    Assertions.assertNotEquals(id, id2);
   }
 
   @Test
   public void testIdentifierWithValueAndType(){
     Identifier id = Identifier.factoryIdentifier("test123", Identifier.IDENTIFIER_TYPE.DOI);
-    Assert.assertNull(id.getId());
-    Assert.assertEquals("test123", id.getValue());
-    Assert.assertEquals(Identifier.IDENTIFIER_TYPE.DOI, id.getIdentifierType());
+    Assertions.assertNull(id.getId());
+    Assertions.assertEquals("test123", id.getValue());
+    Assertions.assertEquals(Identifier.IDENTIFIER_TYPE.DOI, id.getIdentifierType());
   }
 
   @Test
   public void testIdentifierEqualsWithNull(){
-    Assert.assertFalse(Identifier.factoryInternalIdentifier().equals(null));
+    Assertions.assertFalse(Identifier.factoryInternalIdentifier().equals(null));
   }
 
   @Test
   public void testIdentifierEqualsWithItself(){
     Identifier id = Identifier.factoryInternalIdentifier();
-    Assert.assertTrue(id.equals(id));
+    Assertions.assertTrue(id.equals(id));
   }
 
   @Test
   public void testIdentifierEqualsWithDifferentClass(){
-    Assert.assertFalse(Identifier.factoryInternalIdentifier().equals("ThisIsAString"));
+    Assertions.assertFalse(Identifier.factoryInternalIdentifier().equals("ThisIsAString"));
   }
 
   @Test
   public void testToString(){
-    Assert.assertTrue(Identifier.factoryInternalIdentifier().toString().startsWith(Identifier.class.getSimpleName()));
-    Assert.assertTrue(Identifier.factoryInternalIdentifier().toString().contains("id=null"));
-    Assert.assertTrue(Identifier.factoryInternalIdentifier().toString().contains("value="));
-    Assert.assertTrue(Identifier.factoryInternalIdentifier().toString().contains("identifierType=" + Identifier.IDENTIFIER_TYPE.INTERNAL.toString()));
+    Assertions.assertTrue(Identifier.factoryInternalIdentifier().toString().startsWith(Identifier.class.getSimpleName()));
+    Assertions.assertTrue(Identifier.factoryInternalIdentifier().toString().contains("id=null"));
+    Assertions.assertTrue(Identifier.factoryInternalIdentifier().toString().contains("value="));
+    Assertions.assertTrue(Identifier.factoryInternalIdentifier().toString().contains("identifierType=" + Identifier.IDENTIFIER_TYPE.INTERNAL.toString()));
   }
 
 }

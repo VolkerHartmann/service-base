@@ -16,8 +16,8 @@
 package edu.kit.datamanager.test;
 
 import edu.kit.datamanager.entities.RepoServiceRole;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 /**
  *
@@ -27,18 +27,20 @@ public class RepoServiceRoleTest{
 
   @Test
   public void testFromValue(){
-    Assert.assertEquals(RepoServiceRole.fromValue("ROLE_SERVICE_READ"), RepoServiceRole.SERVICE_READ);
-    Assert.assertEquals(RepoServiceRole.fromValue("ROLE_SERVICE_WRITE"), RepoServiceRole.SERVICE_WRITE);
-    Assert.assertEquals(RepoServiceRole.fromValue("ROLE_SERVICE_ADMINISTRATE"), RepoServiceRole.SERVICE_ADMINISTRATOR);
+    Assertions.assertEquals(RepoServiceRole.fromValue("ROLE_SERVICE_READ"), RepoServiceRole.SERVICE_READ);
+    Assertions.assertEquals(RepoServiceRole.fromValue("ROLE_SERVICE_WRITE"), RepoServiceRole.SERVICE_WRITE);
+    Assertions.assertEquals(RepoServiceRole.fromValue("ROLE_SERVICE_ADMINISTRATE"), RepoServiceRole.SERVICE_ADMINISTRATOR);
   }
 
-  @Test(expected = IllegalArgumentException.class)
-  public void testFromIllegalValue(){
-    RepoServiceRole.fromValue("ROLE_INVALID_TEST");
+  @Test
+  public void testFromIllegalValue() {
+    Assertions.assertThrows(IllegalArgumentException.class, () -> {
+      RepoServiceRole.fromValue("ROLE_INVALID_TEST");
+    });
   }
 
   @Test
   public void testGetValueMatchesToString(){
-    Assert.assertEquals(RepoServiceRole.SERVICE_READ.getValue(), RepoServiceRole.SERVICE_READ.toString());
+    Assertions.assertEquals(RepoServiceRole.SERVICE_READ.getValue(), RepoServiceRole.SERVICE_READ.toString());
   }
 }

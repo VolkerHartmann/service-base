@@ -16,9 +16,9 @@
 package edu.kit.datamanager.test;
 
 import edu.kit.datamanager.util.NetworkUtils;
-import org.junit.Assert;
-import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 
 /**
  *
@@ -38,86 +38,86 @@ public class NetworkUtilsTest{
 
   @Test
   public void testIpV4Check(){
-    Assert.assertTrue(NetworkUtils.isIpV4(IPV4_LOCALHOST));
-    Assert.assertTrue(NetworkUtils.isIpV4(IPV4_192_168_0_1));
-    Assert.assertFalse(NetworkUtils.isIpV4(HOSTNAME_LOCALHOST));
+    Assertions.assertTrue(NetworkUtils.isIpV4(IPV4_LOCALHOST));
+    Assertions.assertTrue(NetworkUtils.isIpV4(IPV4_192_168_0_1));
+    Assertions.assertFalse(NetworkUtils.isIpV4(HOSTNAME_LOCALHOST));
 
-    Assert.assertTrue(NetworkUtils.isIpV4(IPV4_KIT));
-    Assert.assertFalse(NetworkUtils.isIpV4(IPV6_KIT));
-    Assert.assertFalse(NetworkUtils.isIpV4(HOSTNAME_KIT));
+    Assertions.assertTrue(NetworkUtils.isIpV4(IPV4_KIT));
+    Assertions.assertFalse(NetworkUtils.isIpV4(IPV6_KIT));
+    Assertions.assertFalse(NetworkUtils.isIpV4(HOSTNAME_KIT));
 
-    Assert.assertFalse(NetworkUtils.isIpV4("1.300.1.1"));
+    Assertions.assertFalse(NetworkUtils.isIpV4("1.300.1.1"));
   }
 
   @Test
   public void testIpV6Check(){
-    Assert.assertTrue(NetworkUtils.isIpV6(IPV6_LOCALHOST));
-    Assert.assertTrue(NetworkUtils.isIpV6(IPV6_192_168_0_1));
-    Assert.assertFalse(NetworkUtils.isIpV6(HOSTNAME_LOCALHOST));
+    Assertions.assertTrue(NetworkUtils.isIpV6(IPV6_LOCALHOST));
+    Assertions.assertTrue(NetworkUtils.isIpV6(IPV6_192_168_0_1));
+    Assertions.assertFalse(NetworkUtils.isIpV6(HOSTNAME_LOCALHOST));
 
-    Assert.assertFalse(NetworkUtils.isIpV6(IPV4_KIT));
-    Assert.assertTrue(NetworkUtils.isIpV6(IPV6_KIT));
-    Assert.assertFalse(NetworkUtils.isIpV6(HOSTNAME_KIT));
+    Assertions.assertFalse(NetworkUtils.isIpV6(IPV4_KIT));
+    Assertions.assertTrue(NetworkUtils.isIpV6(IPV6_KIT));
+    Assertions.assertFalse(NetworkUtils.isIpV6(HOSTNAME_KIT));
 
-    Assert.assertFalse(NetworkUtils.isIpV6("::G"));
+    Assertions.assertFalse(NetworkUtils.isIpV6("::G"));
   }
 
   @Test
   public void testIsIp(){
-    Assert.assertTrue(NetworkUtils.isIp(IPV4_LOCALHOST));
-    Assert.assertTrue(NetworkUtils.isIp(IPV6_LOCALHOST));
-    Assert.assertTrue(NetworkUtils.isIp(IPV6_192_168_0_1));
-    Assert.assertTrue(NetworkUtils.isIp(IPV4_192_168_0_1));
-    Assert.assertFalse(NetworkUtils.isIp(HOSTNAME_LOCALHOST));
+    Assertions.assertTrue(NetworkUtils.isIp(IPV4_LOCALHOST));
+    Assertions.assertTrue(NetworkUtils.isIp(IPV6_LOCALHOST));
+    Assertions.assertTrue(NetworkUtils.isIp(IPV6_192_168_0_1));
+    Assertions.assertTrue(NetworkUtils.isIp(IPV4_192_168_0_1));
+    Assertions.assertFalse(NetworkUtils.isIp(HOSTNAME_LOCALHOST));
 
-    Assert.assertTrue(NetworkUtils.isIp(IPV4_KIT));
-    Assert.assertTrue(NetworkUtils.isIp(IPV6_KIT));
-    Assert.assertFalse(NetworkUtils.isIp(HOSTNAME_KIT));
+    Assertions.assertTrue(NetworkUtils.isIp(IPV4_KIT));
+    Assertions.assertTrue(NetworkUtils.isIp(IPV6_KIT));
+    Assertions.assertFalse(NetworkUtils.isIp(HOSTNAME_KIT));
 
-    Assert.assertFalse(NetworkUtils.isIp("1.300.1.1"));
-    Assert.assertFalse(NetworkUtils.isIp("::G"));
+    Assertions.assertFalse(NetworkUtils.isIp("1.300.1.1"));
+    Assertions.assertFalse(NetworkUtils.isIp("::G"));
   }
 
   @Test
   public void testIsHostname(){
-    Assert.assertFalse(NetworkUtils.isHostname(IPV4_LOCALHOST));
-    Assert.assertFalse(NetworkUtils.isHostname(IPV6_LOCALHOST));
-    Assert.assertFalse(NetworkUtils.isHostname(IPV6_192_168_0_1));
-    Assert.assertFalse(NetworkUtils.isHostname(IPV4_192_168_0_1));
-    Assert.assertTrue(NetworkUtils.isHostname(HOSTNAME_LOCALHOST));
+    Assertions.assertFalse(NetworkUtils.isHostname(IPV4_LOCALHOST));
+    Assertions.assertFalse(NetworkUtils.isHostname(IPV6_LOCALHOST));
+    Assertions.assertFalse(NetworkUtils.isHostname(IPV6_192_168_0_1));
+    Assertions.assertFalse(NetworkUtils.isHostname(IPV4_192_168_0_1));
+    Assertions.assertTrue(NetworkUtils.isHostname(HOSTNAME_LOCALHOST));
 
-    Assert.assertFalse(NetworkUtils.isHostname(IPV4_KIT));
-    Assert.assertFalse(NetworkUtils.isHostname(IPV6_KIT));
-    Assert.assertTrue(NetworkUtils.isHostname(HOSTNAME_KIT));
+    Assertions.assertFalse(NetworkUtils.isHostname(IPV4_KIT));
+    Assertions.assertFalse(NetworkUtils.isHostname(IPV6_KIT));
+    Assertions.assertTrue(NetworkUtils.isHostname(HOSTNAME_KIT));
 
-    Assert.assertFalse(NetworkUtils.isHostname("1.300.1.1"));
-    Assert.assertFalse(NetworkUtils.isHostname("::G"));
+    Assertions.assertFalse(NetworkUtils.isHostname("1.300.1.1"));
+    Assertions.assertFalse(NetworkUtils.isHostname("::G"));
 
-    Assert.assertFalse(NetworkUtils.isHostname("invalidHostname.uu"));
+    Assertions.assertFalse(NetworkUtils.isHostname("invalidHostname.uu"));
   }
 
   @Test
-  @Ignore
+  @Disabled
   public void testMatches(){
 //skip matching test as this may fail often due to DynDNS issues or resolution issues
-//    Assert.assertTrue(NetworkUtils.matches(HOSTNAME_KIT, IPV4_KIT));
-//    Assert.assertTrue(NetworkUtils.matches(HOSTNAME_KIT, IPV6_KIT));
-//    Assert.assertTrue(NetworkUtils.matches(HOSTNAME_KIT, HOSTNAME_KIT));
-//    Assert.assertTrue(NetworkUtils.matches(IPV4_KIT, IPV4_KIT));
-//    Assert.assertTrue(NetworkUtils.matches(IPV6_KIT, IPV4_KIT));
+//    Assertions.assertTrue(NetworkUtils.matches(HOSTNAME_KIT, IPV4_KIT));
+//    Assertions.assertTrue(NetworkUtils.matches(HOSTNAME_KIT, IPV6_KIT));
+//    Assertions.assertTrue(NetworkUtils.matches(HOSTNAME_KIT, HOSTNAME_KIT));
+//    Assertions.assertTrue(NetworkUtils.matches(IPV4_KIT, IPV4_KIT));
+//    Assertions.assertTrue(NetworkUtils.matches(IPV6_KIT, IPV4_KIT));
 
-    Assert.assertTrue(NetworkUtils.matches(IPV4_KIT, IPV4_KIT));
+    Assertions.assertTrue(NetworkUtils.matches(IPV4_KIT, IPV4_KIT));
 
-    Assert.assertTrue(NetworkUtils.matches(IPV4_KIT, HOSTNAME_KIT));
-//    Assert.assertTrue(NetworkUtils.matches(IPV6_KIT, HOSTNAME_KIT));
-    Assert.assertTrue(NetworkUtils.matches(HOSTNAME_KIT, HOSTNAME_KIT));
+    Assertions.assertTrue(NetworkUtils.matches(IPV4_KIT, HOSTNAME_KIT));
+//    Assertions.assertTrue(NetworkUtils.matches(IPV6_KIT, HOSTNAME_KIT));
+    Assertions.assertTrue(NetworkUtils.matches(HOSTNAME_KIT, HOSTNAME_KIT));
 
-    Assert.assertFalse(NetworkUtils.matches(HOSTNAME_KIT, IPV4_LOCALHOST));
-    Assert.assertFalse(NetworkUtils.matches(IPV4_LOCALHOST, IPV4_KIT));
-    Assert.assertFalse(NetworkUtils.matches(IPV6_KIT, IPV6_192_168_0_1));
-    Assert.assertFalse(NetworkUtils.matches(HOSTNAME_KIT, HOSTNAME_LOCALHOST));
+    Assertions.assertFalse(NetworkUtils.matches(HOSTNAME_KIT, IPV4_LOCALHOST));
+    Assertions.assertFalse(NetworkUtils.matches(IPV4_LOCALHOST, IPV4_KIT));
+    Assertions.assertFalse(NetworkUtils.matches(IPV6_KIT, IPV6_192_168_0_1));
+    Assertions.assertFalse(NetworkUtils.matches(HOSTNAME_KIT, HOSTNAME_LOCALHOST));
 
-    Assert.assertFalse(NetworkUtils.matches(HOSTNAME_KIT, "invalidHostnameButNotCheckedHere.uu"));
+    Assertions.assertFalse(NetworkUtils.matches(HOSTNAME_KIT, "invalidHostnameButNotCheckedHere.uu"));
 
   }
 

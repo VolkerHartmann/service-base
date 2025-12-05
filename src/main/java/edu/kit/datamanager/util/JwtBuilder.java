@@ -15,8 +15,7 @@
  */
 package edu.kit.datamanager.util;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import tools.jackson.databind.json.JsonMapper;
 import edu.kit.datamanager.entities.RepoRole;
 import edu.kit.datamanager.entities.RepoUserRole;
 import edu.kit.datamanager.security.filter.JwtAuthenticationToken;
@@ -35,6 +34,7 @@ import java.util.Map.Entry;
 import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import tools.jackson.core.JacksonException;
 
 /**
  * Builder for internal JWT.
@@ -127,20 +127,20 @@ public class JwtBuilder {
             switch (type) {
                 case USER:
                     addSimpleClaim("username", principal);
-                    claims.put("roles", new ObjectMapper().writeValueAsString(roles.isEmpty() ? new String[]{RepoUserRole.GUEST.getValue()} : roles.toArray(new String[]{})));
+                    claims.put("roles", new JsonMapper().writeValueAsString(roles.isEmpty() ? new String[]{RepoUserRole.GUEST.getValue()} : roles.toArray(new String[]{})));
                     break;
                 case SERVICE:
                     addSimpleClaim("servicename", principal);
-                    claims.put("roles", new ObjectMapper().writeValueAsString(roles.isEmpty() ? new String[]{RepoUserRole.GUEST.getValue()} : roles.toArray(new String[]{})));
+                    claims.put("roles", new JsonMapper().writeValueAsString(roles.isEmpty() ? new String[]{RepoUserRole.GUEST.getValue()} : roles.toArray(new String[]{})));
                     break;
                 case TEMPORARY:
                     addSimpleClaim("principalname", principal);
-                    claims.put("permissions", new ObjectMapper().writeValueAsString(permissions.toArray(new ScopedPermission[]{})));
+                    claims.put("permissions", new JsonMapper().writeValueAsString(permissions.toArray(new ScopedPermission[]{})));
                     break;
                 default:
                     LOGGER.warn("Invalid type {}. Leaving claims unchanged.", type);
             }
-        } catch (JsonProcessingException ex) {
+        } catch (JacksonException ex) {
             LOGGER.warn("Failed to create claim map.", ex);
         }
         return claims;

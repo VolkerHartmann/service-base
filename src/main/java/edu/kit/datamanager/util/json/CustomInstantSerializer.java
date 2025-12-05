@@ -15,11 +15,11 @@
  */
 package edu.kit.datamanager.util.json;
 
-import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonSerializer;
-import com.fasterxml.jackson.databind.SerializerProvider;
-import java.io.IOException;
+import tools.jackson.core.JacksonException;
+import tools.jackson.core.JsonGenerator;
+import tools.jackson.databind.SerializationContext;
+import tools.jackson.databind.ValueSerializer;
+
 import java.time.Instant;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
@@ -29,17 +29,17 @@ import java.time.temporal.ChronoUnit;
  *
  * @author jejkal
  */
-public class CustomInstantSerializer extends JsonSerializer<Instant> {
-    
+public class CustomInstantSerializer extends ValueSerializer<Instant> {
+
     private final DateTimeFormatter fmt = DateTimeFormatter.ISO_DATE_TIME.withZone(ZoneOffset.UTC);
-    
+
     @Override
-    public void serialize(Instant value, JsonGenerator gen, SerializerProvider serializers) throws IOException, JsonProcessingException {
+    public void serialize(Instant value, JsonGenerator gen, SerializationContext serializers) throws JacksonException {
         if (value == null) {
             gen.writeString("");
         } else {
             gen.writeString(fmt.format(value.truncatedTo(ChronoUnit.MILLIS)));
         }
-        
+
     }
 }

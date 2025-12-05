@@ -16,8 +16,8 @@
 package edu.kit.datamanager.test;
 
 import edu.kit.datamanager.entities.RepoUserRole;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 /**
  *
@@ -27,20 +27,22 @@ public class RepoUserRoleTest{
 
   @Test
   public void testFromValue(){
-    Assert.assertEquals(RepoUserRole.fromValue("ROLE_CURATOR"), RepoUserRole.CURATOR);
-    Assert.assertEquals(RepoUserRole.fromValue("ROLE_ADMINISTRATOR"), RepoUserRole.ADMINISTRATOR);
-    Assert.assertEquals(RepoUserRole.fromValue("ROLE_USER"), RepoUserRole.USER);
-    Assert.assertEquals(RepoUserRole.fromValue("ROLE_GUEST"), RepoUserRole.GUEST);
-    Assert.assertEquals(RepoUserRole.fromValue("ROLE_INACTIVE"), RepoUserRole.INACTIVE);
+    Assertions.assertEquals(RepoUserRole.fromValue("ROLE_CURATOR"), RepoUserRole.CURATOR);
+    Assertions.assertEquals(RepoUserRole.fromValue("ROLE_ADMINISTRATOR"), RepoUserRole.ADMINISTRATOR);
+    Assertions.assertEquals(RepoUserRole.fromValue("ROLE_USER"), RepoUserRole.USER);
+    Assertions.assertEquals(RepoUserRole.fromValue("ROLE_GUEST"), RepoUserRole.GUEST);
+    Assertions.assertEquals(RepoUserRole.fromValue("ROLE_INACTIVE"), RepoUserRole.INACTIVE);
   }
 
-  @Test(expected = IllegalArgumentException.class)
-  public void testFromIllegalValue(){
-    RepoUserRole.fromValue("ROLE_INVALID_TEST");
+  @Test
+  public void testFromIllegalValue() {
+    Assertions.assertThrows(IllegalArgumentException.class, () -> {
+      RepoUserRole.fromValue("ROLE_INVALID_TEST");
+    });
   }
 
   @Test
   public void testGetValueMatchesToString(){
-    Assert.assertEquals(RepoUserRole.CURATOR.getValue(), RepoUserRole.CURATOR.toString());
+    Assertions.assertEquals(RepoUserRole.CURATOR.getValue(), RepoUserRole.CURATOR.toString());
   }
 }

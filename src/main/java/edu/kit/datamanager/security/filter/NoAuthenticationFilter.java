@@ -15,8 +15,7 @@
  */
 package edu.kit.datamanager.security.filter;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import tools.jackson.databind.ObjectMapper;
 import com.nimbusds.jose.util.StandardCharset;
 import edu.kit.datamanager.entities.RepoServiceRole;
 import edu.kit.datamanager.exceptions.InvalidAuthenticationException;
@@ -41,6 +40,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
+import tools.jackson.core.JacksonException;
 
 /**
  * Filter adding security context if no authorization is available.
@@ -79,7 +79,7 @@ public class NoAuthenticationFilter extends OncePerRequestFilter {
             rolesAsString.add(RepoServiceRole.SERVICE_WRITE.getValue());
             try {
                 claimsMap.put(JwtAuthenticationToken.ROLES_CLAIM, new ObjectMapper().writeValueAsString(rolesAsString.toArray(new String[]{})));
-            } catch (JsonProcessingException ex) {
+            } catch (JacksonException ex) {
                 throw new InvalidAuthenticationException("Failed to create JWToken.", ex);
             }
             /*Set<Map.Entry<String, String>> claimEntries = claimsMap.entrySet();

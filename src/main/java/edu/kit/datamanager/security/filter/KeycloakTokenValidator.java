@@ -21,8 +21,7 @@
  */
 package edu.kit.datamanager.security.filter;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import tools.jackson.databind.ObjectMapper;
 import com.nimbusds.jose.JOSEException;
 import com.nimbusds.jose.JWSAlgorithm;
 import com.nimbusds.jose.RemoteKeySourceException;
@@ -52,6 +51,7 @@ import java.util.Map;
 import java.util.Objects;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import tools.jackson.core.JacksonException;
 
 /**
  * Validator implementation for keycloak bearer tokens.
@@ -187,7 +187,7 @@ public class KeycloakTokenValidator {
             LOG.error("Failed to obtain remote key for JWT validation.", e);
         } catch (BadJWTException e) {
             LOG.warn("Invalid JWT received.", e);
-        } catch (ParseException | JOSEException | JsonProcessingException e) {
+        } catch (ParseException | JOSEException | JacksonException e) {
             LOG.error("Failed to parse JWT.", e);
         }
         return null;

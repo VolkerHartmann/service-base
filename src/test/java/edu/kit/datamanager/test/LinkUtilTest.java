@@ -16,8 +16,8 @@
 package edu.kit.datamanager.test;
 
 import edu.kit.datamanager.util.LinkUtil;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 /**
  *
@@ -27,11 +27,11 @@ public class LinkUtilTest{
 
   @Test
   public void testLinkCreation(){
-    Assert.assertEquals("<http://localhost:8080/myService?page=1>; rel=\"next\"", LinkUtil.createLinkHeader("http://localhost:8080/myService?page=1", LinkUtil.REL_NEXT));
-    Assert.assertEquals("<http://localhost:8080/myService?page=1>; rel=\"first\"", LinkUtil.createLinkHeader("http://localhost:8080/myService?page=1", LinkUtil.REL_FIRST));
-    Assert.assertEquals("<http://localhost:8080/myService?page=1>; rel=\"last\"", LinkUtil.createLinkHeader("http://localhost:8080/myService?page=1", LinkUtil.REL_LAST));
-    Assert.assertEquals("<http://localhost:8080/myService?page=1>; rel=\"prev\"", LinkUtil.createLinkHeader("http://localhost:8080/myService?page=1", LinkUtil.REL_PREV));
-    Assert.assertEquals("<http://localhost:8080/myService?page=1>; rel=\"collection\"", LinkUtil.createLinkHeader("http://localhost:8080/myService?page=1", LinkUtil.REL_COLLECTION));
+    Assertions.assertEquals("<http://localhost:8080/myService?page=1>; rel=\"next\"", LinkUtil.createLinkHeader("http://localhost:8080/myService?page=1", LinkUtil.REL_NEXT));
+    Assertions.assertEquals("<http://localhost:8080/myService?page=1>; rel=\"first\"", LinkUtil.createLinkHeader("http://localhost:8080/myService?page=1", LinkUtil.REL_FIRST));
+    Assertions.assertEquals("<http://localhost:8080/myService?page=1>; rel=\"last\"", LinkUtil.createLinkHeader("http://localhost:8080/myService?page=1", LinkUtil.REL_LAST));
+    Assertions.assertEquals("<http://localhost:8080/myService?page=1>; rel=\"prev\"", LinkUtil.createLinkHeader("http://localhost:8080/myService?page=1", LinkUtil.REL_PREV));
+    Assertions.assertEquals("<http://localhost:8080/myService?page=1>; rel=\"collection\"", LinkUtil.createLinkHeader("http://localhost:8080/myService?page=1", LinkUtil.REL_COLLECTION));
   }
 
 }

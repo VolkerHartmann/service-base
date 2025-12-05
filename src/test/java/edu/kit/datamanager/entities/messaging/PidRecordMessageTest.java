@@ -15,8 +15,8 @@
  */
 package edu.kit.datamanager.entities.messaging;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 /**
  *
@@ -54,13 +54,13 @@ public class PidRecordMessageTest {
         msg = PidRecordMessage.creation(pid, url, principal, sender);
         break;
     }
-    Assert.assertEquals(entityName, msg.getEntityName());
-    Assert.assertEquals(principal, msg.getPrincipal());
-    Assert.assertEquals(sender, msg.getSender());
-    Assert.assertNotNull(msg.getTimestamp());
+    Assertions.assertEquals(entityName, msg.getEntityName());
+    Assertions.assertEquals(principal, msg.getPrincipal());
+    Assertions.assertEquals(sender, msg.getSender());
+    Assertions.assertNotNull(msg.getTimestamp());
 
-    Assert.assertEquals(pid, msg.getEntityId());
-    Assert.assertEquals(action.getValue(), msg.getAction());
-    Assert.assertEquals(entityName + "." + action.getValue(), msg.getRoutingKey());
+    Assertions.assertEquals(pid, msg.getEntityId());
+    Assertions.assertEquals(action.getValue(), msg.getAction());
+    Assertions.assertEquals(entityName + "." + action.getValue(), msg.getRoutingKey());
   }
 }

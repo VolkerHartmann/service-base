@@ -15,14 +15,15 @@
  */
 package edu.kit.datamanager.security.filter;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import edu.kit.datamanager.exceptions.InvalidAuthenticationException;
-import java.io.IOException;
-import java.util.Collection;
-import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.GrantedAuthority;
+import tools.jackson.core.JacksonException;
+import tools.jackson.databind.ObjectMapper;
+
+import java.util.Collection;
+import java.util.List;
 
 /**
  *
@@ -78,7 +79,7 @@ public class JwtServiceToken extends JwtAuthenticationToken {
         ObjectMapper mapper = new ObjectMapper();
         try {
             sources = mapper.readValue(value, String[].class);
-        } catch (IOException ex) {
+        } catch (JacksonException ex) {
             throw new InvalidAuthenticationException("Failed to read sources from claim value " + value + ".");
         }
     }

@@ -24,32 +24,34 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.impl.DefaultClaims;
-import java.util.Date;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.security.Key;
-import javax.crypto.spec.SecretKeySpec;
 import org.apache.commons.lang3.time.DateUtils;
-import org.junit.Assert;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import static org.mockito.ArgumentMatchers.any;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
-import static org.mockito.Mockito.doAnswer;
 import org.mockito.invocation.InvocationOnMock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.stubbing.Answer;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 
+import javax.crypto.spec.SecretKeySpec;
+import java.security.Key;
+import java.util.Date;
+
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doAnswer;
+
 /**
  *
  * @author jejkal
  */
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class NoAuthenticationFilterTest {
 
     private final String key = "vkfvoswsohwrxgjaxipuiyyjgubggzdaqrcuupbugxtnalhiegkppdgjgwxsmvdb";
@@ -61,23 +63,23 @@ public class NoAuthenticationFilterTest {
             @Override
             public Object answer(InvocationOnMock invocation) throws Throwable {
                 Authentication answer = (Authentication) invocation.getArguments()[0];
-                Assert.assertTrue(answer instanceof JwtAuthenticationToken);
-                Assert.assertTrue(answer instanceof JwtServiceToken);
-                Assert.assertEquals("USERS", ((JwtAuthenticationToken) answer).getGroups().get(0));
-                Assert.assertEquals(JwtAuthenticationToken.TOKEN_TYPE.SERVICE, ((JwtServiceToken) answer).getTokenType());
-                Assert.assertEquals(JwtServiceToken.SELF_SERVICE_NAME, ((JwtServiceToken) answer).getPrincipal());
-                Assert.assertTrue(((JwtServiceToken) answer).getAuthorities().contains(new SimpleGrantedAuthority(RepoServiceRole.SERVICE_WRITE.getValue())));
+                Assertions.assertTrue(answer instanceof JwtAuthenticationToken);
+                Assertions.assertTrue(answer instanceof JwtServiceToken);
+                Assertions.assertEquals("USERS", ((JwtAuthenticationToken) answer).getGroups().get(0));
+                Assertions.assertEquals(JwtAuthenticationToken.TOKEN_TYPE.SERVICE, ((JwtServiceToken) answer).getTokenType());
+                Assertions.assertEquals(JwtServiceToken.SELF_SERVICE_NAME, ((JwtServiceToken) answer).getPrincipal());
+                Assertions.assertTrue(((JwtServiceToken) answer).getAuthorities().contains(new SimpleGrantedAuthority(RepoServiceRole.SERVICE_WRITE.getValue())));
 
                 Key secretKey = new SecretKeySpec(key.getBytes(StandardCharset.UTF_8), "HmacSHA256");
                 Jws<Claims> jws = Jwts.parser().setSigningKey(secretKey).build().parseClaimsJws(((JwtServiceToken) answer).getToken());
                 DefaultClaims claims = (DefaultClaims) jws.getBody();
 
-                Assert.assertTrue(claims.containsKey("groups"));
-                Assert.assertTrue(claims.containsKey("tokenType"));
-                Assert.assertTrue(claims.containsKey("servicename"));
-                Assert.assertTrue(claims.containsKey("roles"));
-                Assert.assertTrue(claims.containsKey("exp"));
-                Assert.assertTrue(claims.get("exp", Date.class).before(DateUtils.addHours(new Date(), 1)));
+                Assertions.assertTrue(claims.containsKey("groups"));
+                Assertions.assertTrue(claims.containsKey("tokenType"));
+                Assertions.assertTrue(claims.containsKey("servicename"));
+                Assertions.assertTrue(claims.containsKey("roles"));
+                Assertions.assertTrue(claims.containsKey("exp"));
+                Assertions.assertTrue(claims.get("exp", Date.class).before(DateUtils.addHours(new Date(), 1)));
 
                 return null;
             }

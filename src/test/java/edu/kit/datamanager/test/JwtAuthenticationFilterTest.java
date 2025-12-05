@@ -27,18 +27,13 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.impl.DefaultClaims;
-import java.util.Arrays;
-import java.util.Date;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.apache.commons.lang3.time.DateUtils;
-import org.junit.Assert;
-import org.junit.Test;
-import static org.mockito.ArgumentMatchers.any;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
-import static org.mockito.Mockito.doAnswer;
-import static org.mockito.Mockito.times;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -46,6 +41,13 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
+
+import java.util.Arrays;
+import java.util.Date;
+
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doAnswer;
+import static org.mockito.Mockito.times;
 
 /**
  *
@@ -109,22 +111,22 @@ public class JwtAuthenticationFilterTest {
                 //validate token elements
                 Authentication answer = (Authentication) invocation.getArguments()[0];
 
-                Assert.assertTrue(answer instanceof JwtAuthenticationToken);
-                Assert.assertTrue(answer instanceof JwtUserToken);
-                Assert.assertTrue(((JwtAuthenticationToken) answer).getGroups().contains("USERS"));
-                Assert.assertTrue(((JwtAuthenticationToken) answer).getGroups().contains("TEAM1"));
-                Assert.assertEquals(JwtAuthenticationToken.TOKEN_TYPE.USER, ((JwtUserToken) answer).getTokenType());
-                Assert.assertEquals("user", ((JwtUserToken) answer).getPrincipal());
-                Assert.assertTrue(((JwtUserToken) answer).getAuthorities().contains(new SimpleGrantedAuthority(RepoUserRole.ADMINISTRATOR.getValue())));
+                Assertions.assertTrue(answer instanceof JwtAuthenticationToken);
+                Assertions.assertTrue(answer instanceof JwtUserToken);
+                Assertions.assertTrue(((JwtAuthenticationToken) answer).getGroups().contains("USERS"));
+                Assertions.assertTrue(((JwtAuthenticationToken) answer).getGroups().contains("TEAM1"));
+                Assertions.assertEquals(JwtAuthenticationToken.TOKEN_TYPE.USER, ((JwtUserToken) answer).getTokenType());
+                Assertions.assertEquals("user", ((JwtUserToken) answer).getPrincipal());
+                Assertions.assertTrue(((JwtUserToken) answer).getAuthorities().contains(new SimpleGrantedAuthority(RepoUserRole.ADMINISTRATOR.getValue())));
 
                 Jws<Claims> jws = Jwts.parser().setSigningKey(key).build().parseClaimsJws(((JwtUserToken) answer).getToken());
                 DefaultClaims claims = (DefaultClaims) jws.getBody();
-                Assert.assertTrue(claims.containsKey("tokenType"));
-                Assert.assertTrue(claims.containsKey("groups"));
-                Assert.assertTrue(claims.containsKey("username"));
-                Assert.assertTrue(claims.containsKey("roles"));
-                Assert.assertTrue(claims.containsKey("exp"));
-                Assert.assertTrue(claims.get("exp", Date.class).before(DateUtils.addHours(new Date(), 1)));
+                Assertions.assertTrue(claims.containsKey("tokenType"));
+                Assertions.assertTrue(claims.containsKey("groups"));
+                Assertions.assertTrue(claims.containsKey("username"));
+                Assertions.assertTrue(claims.containsKey("roles"));
+                Assertions.assertTrue(claims.containsKey("exp"));
+                Assertions.assertTrue(claims.get("exp", Date.class).before(DateUtils.addHours(new Date(), 1)));
                 return null;
             }
         }).when(context).setAuthentication(any(Authentication.class));
@@ -144,14 +146,17 @@ public class JwtAuthenticationFilterTest {
 
     }
 
-    @Test(expected = InvalidAuthenticationException.class)
+    @Test
     public void testUnauthorizedAccessDetected() throws Exception {
+      Assertions.assertThrows(InvalidAuthenticationException.class, () -> {
         //create new token for user 'test123' with ADMINISTRATOR role in group USERS which expires in one hour
         final String token = JwtBuilder.createUserToken("test123", RepoUserRole.ADMINISTRATOR).addObjectClaim("groups", Arrays.asList("USERS")).getCompactToken(key, DateUtils.addHours(new Date(), -1));
 
         Mockito.when(request.getHeader(KeycloakTokenFilter.AUTHORIZATION_HEADER)).thenReturn("Bearer " + token);
         keycloaktokenFilterBean().doFilter(request, response, filterChain);
+      });
     }
+
 
     @Test
     public void testAllowedServiceToken() throws Exception {
@@ -162,11 +167,14 @@ public class JwtAuthenticationFilterTest {
         keycloaktokenFilterBean().doFilter(request, response, filterChain);
     }
 
-    @Test(expected = InvalidAuthenticationException.class)
+    @Test
     public void testUnallowedServiceToken() throws Exception {
+      Assertions.assertThrows(InvalidAuthenticationException.class, () -> {
         final String token = JwtBuilder.createServiceToken("MyService", RepoServiceRole.SERVICE_READ).addSimpleClaim("sources", "[\"google.com\"]").getCompactToken(key);
         Mockito.when(request.getHeader(KeycloakTokenFilter.AUTHORIZATION_HEADER)).thenReturn("Bearer " + token);
 
         keycloaktokenFilterBean().doFilter(request, response, filterChain);
+      });
     }
+
 }

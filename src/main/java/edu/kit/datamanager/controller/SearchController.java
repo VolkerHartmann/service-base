@@ -15,8 +15,8 @@
  */
 package edu.kit.datamanager.controller;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.node.ObjectNode;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.node.ObjectNode;
 import edu.kit.datamanager.configuration.SearchConfiguration;
 import edu.kit.datamanager.util.ElasticSearchUtil;
 import io.swagger.v3.oas.annotations.Operation;

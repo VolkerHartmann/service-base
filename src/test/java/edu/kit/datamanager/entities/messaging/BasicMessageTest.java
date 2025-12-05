@@ -15,13 +15,14 @@
  */
 package edu.kit.datamanager.entities.messaging;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import edu.kit.datamanager.exceptions.MessageValidationException;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+import tools.jackson.core.JacksonException;
+
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-import org.junit.Assert;
-import org.junit.Test;
 
 /**
  *
@@ -30,7 +31,7 @@ import org.junit.Test;
 public class BasicMessageTest{
 
   @Test
-  public void test() throws JsonProcessingException, IOException{
+  public void test() throws JacksonException, IOException{
     BasicMessage msg = new BasicMessage(){
       @Override
       public String getEntityName(){
@@ -45,87 +46,93 @@ public class BasicMessageTest{
     msg.setEntityId("1");
     msg.setAction("create");
 
-    Assert.assertEquals("Test", msg.getEntityName());
-    Assert.assertEquals("tester", msg.getPrincipal());
-    Assert.assertEquals("localhost", msg.getSender());
-    Assert.assertNotNull(msg.getTimestamp());
+    Assertions.assertEquals("Test", msg.getEntityName());
+    Assertions.assertEquals("tester", msg.getPrincipal());
+    Assertions.assertEquals("localhost", msg.getSender());
+    Assertions.assertNotNull(msg.getTimestamp());
 
-    Assert.assertEquals("1", msg.getEntityId());
-    Assert.assertEquals("create", msg.getAction());
+    Assertions.assertEquals("1", msg.getEntityId());
+    Assertions.assertEquals("create", msg.getAction());
 
     //test routing key creation and lowercase entity name
-    Assert.assertEquals("test.create", msg.getRoutingKey());
+    Assertions.assertEquals("test.create", msg.getRoutingKey());
 
     //test lowercase action
     msg.setAction("Create");
-    Assert.assertEquals("test.create", msg.getRoutingKey());
+    Assertions.assertEquals("test.create", msg.getRoutingKey());
 
     //test subcategory
     msg.setSubCategory("data");
-    Assert.assertEquals("test.create.data", msg.getRoutingKey());
+    Assertions.assertEquals("test.create.data", msg.getRoutingKey());
 
     //test lowercase subcategory
     msg.setSubCategory("Data");
-    Assert.assertEquals("test.create.data", msg.getRoutingKey());
+    Assertions.assertEquals("test.create.data", msg.getRoutingKey());
 
     Map<String, String> properties = new HashMap<>();
     properties.put("key", "value");
     properties.put("key2", "anotherValue");
     msg.setMetadata(properties);
 
-    Assert.assertNotNull(msg.getMetadata());
-    Assert.assertEquals(2, msg.getMetadata().size());
+    Assertions.assertNotNull(msg.getMetadata());
+    Assertions.assertEquals(2, msg.getMetadata().size());
 
     String toJson = msg.toJson();
     System.out.println(toJson);
     BasicMessage msg2 = BasicMessage.fromJson(toJson);
 
     //some fields are not ignored and must be equal
-    Assert.assertEquals(msg.getEntityId(), msg2.getEntityId());
-    Assert.assertEquals(msg.getAction(), msg2.getAction());
-    Assert.assertEquals(msg.getSubCategory(), msg2.getSubCategory());
-    Assert.assertEquals(msg.getSender(), msg2.getSender());
-    Assert.assertEquals(msg.getTimestamp(), msg2.getTimestamp());
-    Assert.assertEquals(msg.getMetadata(), msg2.getMetadata());
+    Assertions.assertEquals(msg.getEntityId(), msg2.getEntityId());
+    Assertions.assertEquals(msg.getAction(), msg2.getAction());
+    Assertions.assertEquals(msg.getSubCategory(), msg2.getSubCategory());
+    Assertions.assertEquals(msg.getSender(), msg2.getSender());
+    Assertions.assertEquals(msg.getTimestamp(), msg2.getTimestamp());
+    Assertions.assertEquals(msg.getMetadata(), msg2.getMetadata());
     
   }
 
-  @Test(expected = MessageValidationException.class)
+  @Test
   public void testInvalidEntityName(){
-    BasicMessage msg = new BasicMessage(){
-      @Override
-      public String getEntityName(){
-        return null;
-      }
-    };
+    Assertions.assertThrows(MessageValidationException.class, () -> {
+      BasicMessage msg = new BasicMessage() {
+        @Override
+        public String getEntityName() {
+          return null;
+        }
+      };
 
-    msg.validate();
+      msg.validate();
+    });
   }
 
-  @Test(expected = MessageValidationException.class)
+  @Test
   public void testInvalidAction(){
-    BasicMessage msg = new BasicMessage(){
-      @Override
-      public String getEntityName(){
-        return "test";
-      }
-    };
+    Assertions.assertThrows(MessageValidationException.class, () -> {
+      BasicMessage msg = new BasicMessage() {
+        @Override
+        public String getEntityName() {
+          return "test";
+        }
+      };
 
-    msg.setAction(null);
-    msg.validate();
+      msg.setAction(null);
+      msg.validate();
+    });
   }
 
-  @Test(expected = MessageValidationException.class)
+  @Test
   public void testEntityId(){
-    BasicMessage msg = new BasicMessage(){
-      @Override
-      public String getEntityName(){
-        return "test";
-      }
-    };
+    Assertions.assertThrows(MessageValidationException.class, () -> {
+      BasicMessage msg = new BasicMessage() {
+        @Override
+        public String getEntityName() {
+          return "test";
+        }
+      };
 
-    msg.setAction("create");
-    msg.setEntityId(null);
-    msg.validate();
+      msg.setAction("create");
+      msg.setEntityId(null);
+      msg.validate();
+    });
   }
 }

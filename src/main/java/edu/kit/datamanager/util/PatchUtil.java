@@ -15,24 +15,24 @@
  */
 package edu.kit.datamanager.util;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.github.fge.jsonpatch.JsonPatch;
-import com.github.fge.jsonpatch.JsonPatchException;
 import edu.kit.datamanager.annotations.SecureUpdate;
 import edu.kit.datamanager.entities.PERMISSION;
+import edu.kit.datamanager.exceptions.CustomInternalServerError;
 import edu.kit.datamanager.exceptions.PatchApplicationException;
 import edu.kit.datamanager.exceptions.UpdateForbiddenException;
-import edu.kit.datamanager.exceptions.CustomInternalServerError;
+import edu.kit.datamanager.util.json.JsonPatch;
+import edu.kit.datamanager.util.json.JsonPatchUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.security.core.GrantedAuthority;
+import tools.jackson.core.JacksonException;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.json.JsonMapper;
+
 import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Objects;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.security.core.GrantedAuthority;
 
 /**
  * Helper class for applying patch operations to objects.
@@ -47,16 +47,16 @@ public class PatchUtil {
     }
 
     public static <C> C applyPatch(C resource, JsonPatch patch, Class<C> resourceClass, Collection<? extends GrantedAuthority> authorities) {
-        ObjectMapper tmpObjectMapper = new ObjectMapper();
-        tmpObjectMapper.registerModule(new JavaTimeModule());
+      JsonMapper tmpObjectMapper = new JsonMapper();//JsonMapper.builder().addModule(new JavaTimeModule());
+//        tmpObjectMapper.registerModule(new JavaTimeModule());
         JsonNode resourceAsNode = tmpObjectMapper.convertValue(resource, JsonNode.class);
         C updated;
         try {
             // Apply the patch
-            JsonNode patchedDataResourceAsNode = patch.apply(resourceAsNode);
+            JsonNode patchedDataResourceAsNode = JsonPatchUtil.applyPatch(resourceAsNode, patch);
             //convert resource back to POJO
             updated = tmpObjectMapper.treeToValue(patchedDataResourceAsNode, resourceClass);
-        } catch (JsonPatchException | JsonProcessingException ex) {
+        } catch (JacksonException ex) {
             LOGGER.error("Failed to apply patch '" + patch.toString() + " to resource " + resource, ex);
             throw new PatchApplicationException("Failed to apply patch to resource.");
         }

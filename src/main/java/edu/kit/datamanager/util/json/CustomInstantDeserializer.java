@@ -15,10 +15,9 @@
  */
 package edu.kit.datamanager.util.json;
 
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.DeserializationContext;
-import com.fasterxml.jackson.databind.JsonDeserializer;
+import tools.jackson.core.JsonParser;
+import tools.jackson.core.exc.JacksonIOException;
+import tools.jackson.databind.DeserializationContext;
 import java.io.IOException;
 import java.time.DateTimeException;
 import java.time.Instant;
@@ -31,13 +30,15 @@ import java.time.temporal.ChronoField;
 import java.time.temporal.ChronoUnit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import tools.jackson.core.JacksonException;
+import tools.jackson.databind.ValueDeserializer;
 
 /**
  * Deserializer for Instant attributes.
  *
  * @author jejkal
  */
-public class CustomInstantDeserializer extends JsonDeserializer<Instant> {
+public class CustomInstantDeserializer extends ValueDeserializer<Instant> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(CustomInstantDeserializer.class);
 
@@ -57,7 +58,7 @@ public class CustomInstantDeserializer extends JsonDeserializer<Instant> {
     };
 
     @Override
-    public Instant deserialize(JsonParser p, DeserializationContext ctxt) throws IOException, JsonProcessingException {
+    public Instant deserialize(JsonParser p, DeserializationContext ctxt) throws JacksonException {
         String text = p.getText();
         if (text == null || text.length() == 0) {
             return null;
@@ -80,6 +81,6 @@ public class CustomInstantDeserializer extends JsonDeserializer<Instant> {
                 LOGGER.trace("Date {} cannot be parsed using formatter {}.", text, formatter);
             }
         }
-        throw new DateTimeParseException("Invalid date string. Supported format patterns are: yyyy-MM-dd'T'HH:mm:ss'Z', yyyy, yyyy-MM-dd and yyyy-MM", p.getText(), 0);
+        throw JacksonIOException.construct(new IOException("Invalid date string. Supported format patterns are: yyyy-MM-dd'T'HH:mm:ss'Z', yyyy, yyyy-MM-dd and yyyy-MM but is '" +text + "'."));
     }
 }

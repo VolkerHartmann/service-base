@@ -15,19 +15,17 @@
  */
 package edu.kit.datamanager.validator;
 
+import jakarta.validation.ConstraintValidatorContext;
+import org.apache.commons.io.FileUtils;
+import org.junit.jupiter.api.*;
+
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.file.Files;
-import jakarta.validation.ConstraintValidatorContext;
-import org.apache.commons.io.FileUtils;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
-import static org.junit.Assert.*;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  *
@@ -44,22 +42,22 @@ public class LocalFileValidatorTest {
   public LocalFileValidatorTest() {
   }
 
-  @BeforeClass
+  @BeforeAll
   public static void setUpClass() throws IOException {
     TMP_FILE = Files.createTempFile("localFileValidator", "test").toFile();
     BASH_EXECUTABLE = TMP_FILE.toURI().toURL();
   }
 
-  @AfterClass
+  @AfterAll
   public static void tearDownClass() {
     FileUtils.deleteQuietly(TMP_FILE);
   }
 
-  @Before
+  @BeforeEach
   public void setUp() {
   }
 
-  @After
+  @AfterEach
   public void tearDown() {
   }
 

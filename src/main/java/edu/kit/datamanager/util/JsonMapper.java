@@ -15,9 +15,8 @@
  */
 package edu.kit.datamanager.util;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.joda.JodaModule;
-import com.fasterxml.jackson.module.afterburner.AfterburnerModule;
+import tools.jackson.datatype.joda.JodaModule;
+import tools.jackson.module.afterburner.AfterburnerModule;
 
 /**
  *
@@ -25,18 +24,15 @@ import com.fasterxml.jackson.module.afterburner.AfterburnerModule;
  */
 public interface JsonMapper{
 
-  ObjectMapper MAPPER = ObjectMapperWrapper.init();
+  tools.jackson.databind.json.JsonMapper MAPPER = ObjectMapperWrapper.init();
 
   class ObjectMapperWrapper{
 
     private ObjectMapperWrapper(){
     }
 
-    private static ObjectMapper init(){
-      ObjectMapper objectMapper = new ObjectMapper();
-      objectMapper.registerModule(new JodaModule());
-      objectMapper.registerModule(new AfterburnerModule());
-      return objectMapper;
+    private static tools.jackson.databind.json.JsonMapper init(){
+      return tools.jackson.databind.json.JsonMapper.builder().addModules(new AfterburnerModule(), new JodaModule()).build();
     }
   }
 }

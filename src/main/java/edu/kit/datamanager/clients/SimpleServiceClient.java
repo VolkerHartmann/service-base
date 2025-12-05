@@ -15,7 +15,7 @@
  */
 package edu.kit.datamanager.clients;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import tools.jackson.databind.ObjectMapper;
 import edu.kit.datamanager.entities.repo.DataResource;
 import edu.kit.datamanager.util.ControllerUtils;
 import edu.kit.datamanager.util.ControllerUtils.ContentRange;

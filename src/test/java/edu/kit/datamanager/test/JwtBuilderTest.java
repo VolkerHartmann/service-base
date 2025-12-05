@@ -15,7 +15,7 @@
  */
 package edu.kit.datamanager.test;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import tools.jackson.databind.ObjectMapper;
 import edu.kit.datamanager.entities.PERMISSION;
 import edu.kit.datamanager.entities.RepoServiceRole;
 import edu.kit.datamanager.entities.RepoUserRole;
@@ -28,8 +28,8 @@ import edu.kit.datamanager.util.JwtBuilder;
 import io.jsonwebtoken.Claims;
 import java.io.IOException;
 import java.util.Map;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 /**
  *
@@ -44,26 +44,26 @@ public class JwtBuilderTest{
     builder.addSimpleClaim("sources", "[\"localhost\"]");
 
     Map<String, Object> claimMap = builder.getClaimMap();
-    Assert.assertTrue(claimMap.containsKey("servicename"));
-    Assert.assertEquals("myservice", claimMap.get("servicename"));
-    Assert.assertTrue(claimMap.containsKey("tokenType"));
-    Assert.assertEquals(JwtAuthenticationToken.TOKEN_TYPE.SERVICE.toString(), (String) claimMap.get("tokenType"));
-    Assert.assertTrue(claimMap.containsKey("roles"));
+    Assertions.assertTrue(claimMap.containsKey("servicename"));
+    Assertions.assertEquals("myservice", claimMap.get("servicename"));
+    Assertions.assertTrue(claimMap.containsKey("tokenType"));
+    Assertions.assertEquals(JwtAuthenticationToken.TOKEN_TYPE.SERVICE.toString(), (String) claimMap.get("tokenType"));
+    Assertions.assertTrue(claimMap.containsKey("roles"));
     String[] roles = new ObjectMapper().readValue((String) claimMap.get("roles"), String[].class);
-    Assert.assertArrayEquals(new String[]{RepoServiceRole.SERVICE_ADMINISTRATOR.getValue()}, roles);
+    Assertions.assertArrayEquals(new String[]{RepoServiceRole.SERVICE_ADMINISTRATOR.getValue()}, roles);
 
     JwtAuthenticationToken jwtAuthToken = builder.getJwtAuthenticationToken(key);
-    Assert.assertTrue(jwtAuthToken instanceof JwtServiceToken);
+    Assertions.assertTrue(jwtAuthToken instanceof JwtServiceToken);
     String compactToken = builder.getCompactToken(key);
-    Assert.assertEquals(compactToken, jwtAuthToken.getToken());
+    Assertions.assertEquals(compactToken, jwtAuthToken.getToken());
 
     Claims claims = builder.getClaims();
-    Assert.assertTrue(claims.containsKey("servicename"));
-    Assert.assertEquals("myservice", claims.get("servicename"));
-    Assert.assertTrue(claims.containsKey("tokenType"));
-    Assert.assertEquals(JwtAuthenticationToken.TOKEN_TYPE.SERVICE.toString(), (String) claims.get("tokenType"));
+    Assertions.assertTrue(claims.containsKey("servicename"));
+    Assertions.assertEquals("myservice", claims.get("servicename"));
+    Assertions.assertTrue(claims.containsKey("tokenType"));
+    Assertions.assertEquals(JwtAuthenticationToken.TOKEN_TYPE.SERVICE.toString(), (String) claims.get("tokenType"));
     roles = new ObjectMapper().readValue((String) claims.get("roles"), String[].class);
-    Assert.assertArrayEquals(new String[]{RepoServiceRole.SERVICE_ADMINISTRATOR.getValue()}, roles);
+    Assertions.assertArrayEquals(new String[]{RepoServiceRole.SERVICE_ADMINISTRATOR.getValue()}, roles);
   }
 
   @Test
@@ -71,37 +71,37 @@ public class JwtBuilderTest{
     JwtBuilder builder = JwtBuilder.createUserToken("tester", RepoUserRole.USER).addSimpleClaim("age", 38).addSimpleClaim("active", Boolean.TRUE);
 
     Map<String, Object> claimMap = builder.getClaimMap();
-    Assert.assertTrue(claimMap.containsKey("username"));
-    Assert.assertEquals("tester", claimMap.get("username"));
-    Assert.assertTrue(claimMap.containsKey("tokenType"));
-    Assert.assertEquals(JwtAuthenticationToken.TOKEN_TYPE.USER.toString(), (String) claimMap.get("tokenType"));
-    Assert.assertTrue(claimMap.containsKey("age"));
-    Assert.assertEquals(38, (int) claimMap.get("age"));
-    Assert.assertTrue(claimMap.containsKey("active"));
-    Assert.assertEquals(true, (boolean) claimMap.get("active"));
+    Assertions.assertTrue(claimMap.containsKey("username"));
+    Assertions.assertEquals("tester", claimMap.get("username"));
+    Assertions.assertTrue(claimMap.containsKey("tokenType"));
+    Assertions.assertEquals(JwtAuthenticationToken.TOKEN_TYPE.USER.toString(), (String) claimMap.get("tokenType"));
+    Assertions.assertTrue(claimMap.containsKey("age"));
+    Assertions.assertEquals(38, (int) claimMap.get("age"));
+    Assertions.assertTrue(claimMap.containsKey("active"));
+    Assertions.assertEquals(true, (boolean) claimMap.get("active"));
 
-    Assert.assertTrue(claimMap.containsKey("roles"));
+    Assertions.assertTrue(claimMap.containsKey("roles"));
     String[] roles = new ObjectMapper().readValue((String) claimMap.get("roles"), String[].class);
-    Assert.assertArrayEquals(new String[]{RepoUserRole.USER.getValue()}, roles);
+    Assertions.assertArrayEquals(new String[]{RepoUserRole.USER.getValue()}, roles);
 
     JwtAuthenticationToken jwtAuthToken = builder.getJwtAuthenticationToken(key);
-    Assert.assertTrue(jwtAuthToken instanceof JwtUserToken);
+    Assertions.assertTrue(jwtAuthToken instanceof JwtUserToken);
     String compactToken = builder.getCompactToken(key);
-    Assert.assertEquals(compactToken, jwtAuthToken.getToken());
+    Assertions.assertEquals(compactToken, jwtAuthToken.getToken());
 
     Claims claims = builder.getClaims();
-    Assert.assertTrue(claims.containsKey("username"));
-    Assert.assertEquals("tester", claims.get("username"));
-    Assert.assertTrue(claims.containsKey("tokenType"));
-    Assert.assertEquals(JwtAuthenticationToken.TOKEN_TYPE.USER.toString(), (String) claims.get("tokenType"));
-    Assert.assertTrue(claims.containsKey("age"));
-    Assert.assertEquals(38, (int) claims.get("age"));
-    Assert.assertTrue(claims.containsKey("active"));
-    Assert.assertEquals(true, (boolean) claims.get("active"));
-    Assert.assertTrue(claims.containsKey("tokenType"));
-    Assert.assertEquals(JwtAuthenticationToken.TOKEN_TYPE.USER.toString(), (String) claims.get("tokenType"));
+    Assertions.assertTrue(claims.containsKey("username"));
+    Assertions.assertEquals("tester", claims.get("username"));
+    Assertions.assertTrue(claims.containsKey("tokenType"));
+    Assertions.assertEquals(JwtAuthenticationToken.TOKEN_TYPE.USER.toString(), (String) claims.get("tokenType"));
+    Assertions.assertTrue(claims.containsKey("age"));
+    Assertions.assertEquals(38, (int) claims.get("age"));
+    Assertions.assertTrue(claims.containsKey("active"));
+    Assertions.assertEquals(true, (boolean) claims.get("active"));
+    Assertions.assertTrue(claims.containsKey("tokenType"));
+    Assertions.assertEquals(JwtAuthenticationToken.TOKEN_TYPE.USER.toString(), (String) claims.get("tokenType"));
     roles = new ObjectMapper().readValue((String) claims.get("roles"), String[].class);
-    Assert.assertArrayEquals(new String[]{RepoUserRole.USER.getValue()}, roles);
+    Assertions.assertArrayEquals(new String[]{RepoUserRole.USER.getValue()}, roles);
   }
 
   @Test
@@ -109,33 +109,33 @@ public class JwtBuilderTest{
     JwtBuilder builder = JwtBuilder.createTemporaryToken("test@mail.org", ScopedPermission.factoryScopedPermission("DataResource", "1", PERMISSION.WRITE));
 
     Map<String, Object> claimMap = builder.getClaimMap();
-    Assert.assertTrue(claimMap.containsKey("principalname"));
-    Assert.assertEquals("test@mail.org", claimMap.get("principalname"));
+    Assertions.assertTrue(claimMap.containsKey("principalname"));
+    Assertions.assertEquals("test@mail.org", claimMap.get("principalname"));
 
-    Assert.assertEquals(JwtAuthenticationToken.TOKEN_TYPE.TEMPORARY.toString(), (String) claimMap.get("tokenType"));
-    Assert.assertTrue(claimMap.containsKey("permissions"));
+    Assertions.assertEquals(JwtAuthenticationToken.TOKEN_TYPE.TEMPORARY.toString(), (String) claimMap.get("tokenType"));
+    Assertions.assertTrue(claimMap.containsKey("permissions"));
     ScopedPermission[] permissions = new ObjectMapper().readValue((String) claimMap.get("permissions"), ScopedPermission[].class);
-    Assert.assertArrayEquals(new ScopedPermission[]{ScopedPermission.factoryScopedPermission("DataResource", "1", PERMISSION.WRITE)}, permissions);
+    Assertions.assertArrayEquals(new ScopedPermission[]{ScopedPermission.factoryScopedPermission("DataResource", "1", PERMISSION.WRITE)}, permissions);
 
     JwtAuthenticationToken jwtAuthToken = builder.getJwtAuthenticationToken(key);
-    Assert.assertTrue(jwtAuthToken instanceof JwtTemporaryToken);
+    Assertions.assertTrue(jwtAuthToken instanceof JwtTemporaryToken);
     String compactToken = builder.getCompactToken(key);
-    Assert.assertEquals(compactToken, jwtAuthToken.getToken());
+    Assertions.assertEquals(compactToken, jwtAuthToken.getToken());
 
     Claims claims = builder.getClaims();
-    Assert.assertTrue(claims.containsKey("principalname"));
-    Assert.assertEquals("test@mail.org", claims.get("principalname"));
-    Assert.assertTrue(claims.containsKey("tokenType"));
-    Assert.assertEquals(JwtAuthenticationToken.TOKEN_TYPE.TEMPORARY.toString(), (String) claims.get("tokenType"));
+    Assertions.assertTrue(claims.containsKey("principalname"));
+    Assertions.assertEquals("test@mail.org", claims.get("principalname"));
+    Assertions.assertTrue(claims.containsKey("tokenType"));
+    Assertions.assertEquals(JwtAuthenticationToken.TOKEN_TYPE.TEMPORARY.toString(), (String) claims.get("tokenType"));
     permissions = new ObjectMapper().readValue((String) claims.get("permissions"), ScopedPermission[].class);
-    Assert.assertArrayEquals(new ScopedPermission[]{ScopedPermission.factoryScopedPermission("DataResource", "1", PERMISSION.WRITE)}, permissions);
+    Assertions.assertArrayEquals(new ScopedPermission[]{ScopedPermission.factoryScopedPermission("DataResource", "1", PERMISSION.WRITE)}, permissions);
   }
 
   @Test
   public void testTemporaryTokenWithInvalidScopedPermissions() throws IOException{
     JwtBuilder builder = JwtBuilder.createTemporaryToken("test@mail.org");
-    Assert.assertEquals("[]", builder.getClaimMap().get("permissions"));
+    Assertions.assertEquals("[]", builder.getClaimMap().get("permissions"));
     builder = JwtBuilder.createTemporaryToken("test@mail.org", (ScopedPermission[])null);
-    Assert.assertEquals("[]", builder.getClaimMap().get("permissions"));
+    Assertions.assertEquals("[]", builder.getClaimMap().get("permissions"));
   }
 }

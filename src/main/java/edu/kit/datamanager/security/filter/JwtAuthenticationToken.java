@@ -15,18 +15,8 @@
  */
 package edu.kit.datamanager.security.filter;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import edu.kit.datamanager.entities.RepoUserRole;
 import edu.kit.datamanager.exceptions.InvalidAuthenticationException;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import static java.util.stream.Collectors.toList;
 import org.apache.commons.collections4.MapUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,6 +24,12 @@ import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import tools.jackson.core.JacksonException;
+import tools.jackson.databind.ObjectMapper;
+
+import java.util.*;
+
+import static java.util.stream.Collectors.toList;
 
 /**
  *
@@ -114,7 +110,7 @@ public abstract class JwtAuthenticationToken extends AbstractAuthenticationToken
             try {
                 String[] rolesArray = new ObjectMapper().readValue(roles, String[].class);
                 roleSet.addAll(Arrays.asList(rolesArray));
-            } catch (IOException ex) {
+            } catch (JacksonException ex) {
                 LOGGER.warn("Unable to deserialize 'roles' claim from JWT. Using ROLE_GUEST as default.");
             }
         }

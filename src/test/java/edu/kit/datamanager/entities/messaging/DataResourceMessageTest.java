@@ -15,8 +15,8 @@
  */
 package edu.kit.datamanager.entities.messaging;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 /**
  *
@@ -34,16 +34,16 @@ public class DataResourceMessageTest{
   @Test
   public void testFactoryAclMessage(){
     DataResourceMessage msg = DataResourceMessage.factoryUpdateAclMessage("1", "tester", "localhost");
-    Assert.assertEquals("dataresource", msg.getEntityName());
-    Assert.assertEquals("tester", msg.getPrincipal());
-    Assert.assertEquals("localhost", msg.getSender());
-    Assert.assertNotNull(msg.getTimestamp());
+    Assertions.assertEquals("dataresource", msg.getEntityName());
+    Assertions.assertEquals("tester", msg.getPrincipal());
+    Assertions.assertEquals("localhost", msg.getSender());
+    Assertions.assertNotNull(msg.getTimestamp());
 
-    Assert.assertEquals("1", msg.getEntityId());
-    Assert.assertEquals(DataResourceMessage.ACTION.UPDATE.getValue(), msg.getAction());
-    Assert.assertEquals(DataResourceMessage.SUB_CATEGORY.ACL.getValue(), msg.getSubCategory());
+    Assertions.assertEquals("1", msg.getEntityId());
+    Assertions.assertEquals(DataResourceMessage.ACTION.UPDATE.getValue(), msg.getAction());
+    Assertions.assertEquals(DataResourceMessage.SUB_CATEGORY.ACL.getValue(), msg.getSubCategory());
 
-    Assert.assertEquals("dataresource." + DataResourceMessage.ACTION.UPDATE.getValue() + "." + DataResourceMessage.SUB_CATEGORY.ACL.getValue(), msg.getRoutingKey());
+    Assertions.assertEquals("dataresource." + DataResourceMessage.ACTION.UPDATE.getValue() + "." + DataResourceMessage.SUB_CATEGORY.ACL.getValue(), msg.getRoutingKey());
   }
 
   @Test
@@ -77,16 +77,16 @@ public class DataResourceMessageTest{
         msg = DataResourceMessage.factoryCreateMessage("1", "tester", "localhost");
         break;
     }
-    Assert.assertEquals("dataresource", msg.getEntityName());
-    Assert.assertEquals("tester", msg.getPrincipal());
-    Assert.assertEquals("localhost", msg.getSender());
-    Assert.assertNotNull(msg.getTimestamp());
+    Assertions.assertEquals("dataresource", msg.getEntityName());
+    Assertions.assertEquals("tester", msg.getPrincipal());
+    Assertions.assertEquals("localhost", msg.getSender());
+    Assertions.assertNotNull(msg.getTimestamp());
 
-    Assert.assertEquals("1", msg.getEntityId());
-    Assert.assertEquals(action.getValue(), msg.getAction());
+    Assertions.assertEquals("1", msg.getEntityId());
+    Assertions.assertEquals(action.getValue(), msg.getAction());
 
     //test routing key creation and lowercase entity name
-    Assert.assertEquals("dataresource." + action.getValue(), msg.getRoutingKey());
+    Assertions.assertEquals("dataresource." + action.getValue(), msg.getRoutingKey());
   }
 
   /**
@@ -108,26 +108,26 @@ public class DataResourceMessageTest{
         msg = DataResourceMessage.factoryCreateDataMessage("1", contentPath, contentUri, contentType, "tester", "localhost");
         break;
     }
-    Assert.assertEquals("dataresource", msg.getEntityName());
-    Assert.assertEquals("tester", msg.getPrincipal());
-    Assert.assertEquals("localhost", msg.getSender());
-    Assert.assertNotNull(msg.getTimestamp());
+    Assertions.assertEquals("dataresource", msg.getEntityName());
+    Assertions.assertEquals("tester", msg.getPrincipal());
+    Assertions.assertEquals("localhost", msg.getSender());
+    Assertions.assertNotNull(msg.getTimestamp());
 
-    Assert.assertEquals("1", msg.getEntityId());
-    Assert.assertEquals(action.getValue(), msg.getAction());
-    Assert.assertEquals(3, msg.getMetadata().size());
+    Assertions.assertEquals("1", msg.getEntityId());
+    Assertions.assertEquals(action.getValue(), msg.getAction());
+    Assertions.assertEquals(3, msg.getMetadata().size());
 
-    Assert.assertTrue(msg.getMetadata().containsKey(DataResourceMessage.CONTENT_PATH_PROPERTY));
-    Assert.assertTrue(msg.getMetadata().containsKey(DataResourceMessage.CONTENT_TYPE_PROPERTY));
-    Assert.assertTrue(msg.getMetadata().containsKey(DataResourceMessage.CONTENT_URI_PROPERTY));
+    Assertions.assertTrue(msg.getMetadata().containsKey(DataResourceMessage.CONTENT_PATH_PROPERTY));
+    Assertions.assertTrue(msg.getMetadata().containsKey(DataResourceMessage.CONTENT_TYPE_PROPERTY));
+    Assertions.assertTrue(msg.getMetadata().containsKey(DataResourceMessage.CONTENT_URI_PROPERTY));
 
-    Assert.assertEquals(msg.getMetadata().get(DataResourceMessage.CONTENT_PATH_PROPERTY), contentPath);
-    Assert.assertEquals(msg.getMetadata().get(DataResourceMessage.CONTENT_TYPE_PROPERTY), contentType);
-    Assert.assertEquals(msg.getMetadata().get(DataResourceMessage.CONTENT_URI_PROPERTY), contentUri);
+    Assertions.assertEquals(msg.getMetadata().get(DataResourceMessage.CONTENT_PATH_PROPERTY), contentPath);
+    Assertions.assertEquals(msg.getMetadata().get(DataResourceMessage.CONTENT_TYPE_PROPERTY), contentType);
+    Assertions.assertEquals(msg.getMetadata().get(DataResourceMessage.CONTENT_URI_PROPERTY), contentUri);
 
-    Assert.assertEquals(DataResourceMessage.SUB_CATEGORY.DATA.getValue(), msg.getSubCategory());
+    Assertions.assertEquals(DataResourceMessage.SUB_CATEGORY.DATA.getValue(), msg.getSubCategory());
 
     //test routing key creation and lowercase entity name
-    Assert.assertEquals("dataresource." + action.getValue() + "." + DataResourceMessage.SUB_CATEGORY.DATA.getValue(), msg.getRoutingKey());
+    Assertions.assertEquals("dataresource." + action.getValue() + "." + DataResourceMessage.SUB_CATEGORY.DATA.getValue(), msg.getRoutingKey());
   }
 }

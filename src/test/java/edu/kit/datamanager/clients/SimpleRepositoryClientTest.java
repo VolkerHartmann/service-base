@@ -15,41 +15,41 @@
  */
 package edu.kit.datamanager.clients;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import edu.kit.datamanager.SpringTestConfig;
 import edu.kit.datamanager.entities.repo.ContentInformation;
 import edu.kit.datamanager.entities.repo.DataResource;
-import java.net.URI;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import org.junit.Assert;
-import static org.junit.Assert.assertEquals;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringRunner;
-import static org.springframework.test.web.client.ExpectedCount.once;
 import org.springframework.test.web.client.MockRestServiceServer;
-import static org.springframework.test.web.client.match.MockRestRequestMatchers.requestTo;
 import org.springframework.test.web.client.response.MockRestResponseCreators;
-import static org.springframework.test.web.client.response.MockRestResponseCreators.withSuccess;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.client.support.RestGatewaySupport;
+import tools.jackson.databind.ObjectMapper;
+
+import java.net.URI;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.springframework.test.web.client.ExpectedCount.once;
+import static org.springframework.test.web.client.match.MockRestRequestMatchers.requestTo;
+import static org.springframework.test.web.client.response.MockRestResponseCreators.withSuccess;
 
 /**
  *
  * @author jejkal
  */
-@RunWith(SpringRunner.class)
-//@PowerMockIgnore("jakarta.net.ssl.*")
-//@PrepareForTest({RestTemplate.class})
-@SpringBootTest
+@ExtendWith(MockitoExtension.class)
+@SpringBootTest(classes = SpringTestConfig.class)
 @ContextConfiguration(classes = SpringTestConfig.class)
 public class SimpleRepositoryClientTest{
 
@@ -58,7 +58,7 @@ public class SimpleRepositoryClientTest{
   private MockRestServiceServer mockServer;
   private ObjectMapper mapper = new ObjectMapper();
 
-  @Before
+  @BeforeEach
   public void init(){
     RestGatewaySupport gateway = new RestGatewaySupport();
     gateway.setRestTemplate(restTemplate);
@@ -156,7 +156,7 @@ public class SimpleRepositoryClientTest{
     String result = client.getResource(String.class);
     mockServer.verify();
     res = mapper.readValue(result, DataResource.class);
-    Assert.assertNotNull(res);
+    Assertions.assertNotNull(res);
   }
  
   @Test
@@ -165,8 +165,8 @@ public class SimpleRepositoryClientTest{
     SimpleServiceClient client = new SimpleServiceClient(schemaRef);
     client = client.accept(MediaType.TEXT_PLAIN);
     String content = client.getResource(String.class);
-    Assert.assertTrue(content.length() > 100);
-    Assert.assertTrue("Response should contain schema reference!", content.contains(schemaRef));
+    Assertions.assertTrue(content.length() > 100);
+    Assertions.assertTrue(content.contains(schemaRef), "Response should contain schema reference!");
   }
 
   @Test
@@ -234,11 +234,14 @@ public class SimpleRepositoryClientTest{
     }
   }
 
-  @Test(expected = IllegalArgumentException.class)
+  @Test
   public void testUploadWithNullFile() throws Exception{
-    SimpleServiceClient client = new SimpleServiceClient("http://localhost:8080/api/v1/dataresources/");
+    Assertions.assertThrows(IllegalArgumentException.class, () -> {
+      SimpleServiceClient client = new SimpleServiceClient("http://localhost:8080/api/v1/dataresources/");
 
     client.withResourcePath("test123/data/testFile.txt").withFormParam("file", null);
+
+  });
   }
 
   @Test

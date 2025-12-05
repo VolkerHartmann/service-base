@@ -16,8 +16,8 @@
 package edu.kit.datamanager.test;
 
 import edu.kit.datamanager.security.filter.NoopAuthenticationEventPublisher;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
@@ -30,12 +30,12 @@ public class NoopAuthenticationProviderTest{
   @Test
   public void testPublishAuthenticationSuccess(){
     new NoopAuthenticationEventPublisher().publishAuthenticationSuccess(null);
-    Assert.assertTrue("Success event successfully published", true);
+    Assertions.assertTrue(true, "Success event successfully published");
   }
 
   @Test
   public void testPublishAuthenticationFailure(){
     new NoopAuthenticationEventPublisher().publishAuthenticationFailure(new UsernameNotFoundException("Username not found."), null);
-    Assert.assertTrue("Failure event successfully published", true);
+    Assertions.assertTrue(true, "Failure event successfully published");
   }
 }

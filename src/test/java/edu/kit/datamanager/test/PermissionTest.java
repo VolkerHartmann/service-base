@@ -16,8 +16,8 @@
 package edu.kit.datamanager.test;
 
 import edu.kit.datamanager.entities.PERMISSION;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 /**
  *
@@ -25,9 +25,10 @@ import org.junit.Test;
  */
 public class PermissionTest{
 
-  @Test(expected = IllegalArgumentException.class)
+  @Test
   public void testFromValue(){
-    Assert.fail("Permissions " + PERMISSION.fromValue("Invalid") + " should not have been parsed.");
+    Assertions.assertThrows(IllegalArgumentException.class, () -> {
+      Assertions.fail("Permissions " + PERMISSION.fromValue("Invalid") + " should not have been parsed.");
+  });
   }
-
 }

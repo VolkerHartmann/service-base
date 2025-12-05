@@ -15,21 +15,17 @@
  */
 package edu.kit.datamanager.test;
 
+import edu.kit.datamanager.exceptions.InvalidAuthenticationException;
+import edu.kit.datamanager.exceptions.MessageValidationException;
 import edu.kit.datamanager.util.ZipUtils;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.util.zip.ZipOutputStream;
 import org.apache.commons.io.FileUtils;
-import org.junit.AfterClass;
-import org.junit.Assert;
-import org.junit.BeforeClass;
-import org.junit.Ignore;
-import org.junit.Test;
-import org.mockito.Mock;
-import org.mockito.Mockito;
+import org.junit.jupiter.api.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.zip.ZipOutputStream;
 
 /**
  *
@@ -54,16 +50,16 @@ public class ZipUtilTest{
   private final static File SUB_FOLDER = new File(TMP_DIR, SUB_FOLDER_NAME + "/");
   private final static File TEST_FILE_IN_SUB_FOLDER = new File(SUB_FOLDER, TEST_FILE_NAME);
 
-  final @BeforeClass
+  final @BeforeAll
   public static void prepareTest(){
     FileUtils.deleteQuietly(TMP_DIR);
     if(!TMP_DIR.mkdirs()){
-      Assert.fail("Failed to create test folder at " + TMP_DIR);
+      Assertions.fail("Failed to create test folder at " + TMP_DIR);
     }
 
     FileUtils.deleteQuietly(TMP_DIR_WITH_BASE_PATH);
     if(!TMP_DIR_WITH_BASE_PATH.mkdirs()){
-      Assert.fail("Failed to create test folder at " + TMP_DIR_WITH_BASE_PATH);
+      Assertions.fail("Failed to create test folder at " + TMP_DIR_WITH_BASE_PATH);
     }
 
     try{
@@ -83,11 +79,11 @@ public class ZipUtilTest{
       FileUtils.copyDirectory(TMP_DIR, TMP_DIR_WITH_BASE_PATH);
     } catch(IOException ex){
       ex.printStackTrace();
-      Assert.fail("Unable to create testFile");
+      Assertions.fail("Unable to create testFile");
     }
   }
 
-  @AfterClass
+  @AfterAll
   public static void cleanupTest(){
     FileUtils.deleteQuietly(TMP_DIR);
     FileUtils.deleteQuietly(TMP_DIR_WITH_BASE_PATH);
@@ -97,7 +93,7 @@ public class ZipUtilTest{
   public void testZipToCurrentFolder() throws IOException{
     File out = new File(FileUtils.getTempDirectory(), "testZipToCurrentFolder.zip");
     ZipUtils.zip(TMP_DIR, out);
-    Assert.assertTrue(out.exists());
+    Assertions.assertTrue(out.exists());
     //unzip to current folder
     ZipUtils.unzip(out);
 
@@ -115,7 +111,7 @@ public class ZipUtilTest{
   public void testZipToOtherFolder() throws IOException{
     File out = new File(FileUtils.getTempDirectory(), "testZipToOtherFolder.zip");
     ZipUtils.zip(TMP_DIR, out);
-    Assert.assertTrue(out.exists());
+    Assertions.assertTrue(out.exists());
     File destination = new File("out");
     destination.mkdirs();
     //unzip to current folder
@@ -125,7 +121,7 @@ public class ZipUtilTest{
     checkDirectoryStructure(destination);
 
     //out should exists as it is not deleted by default (related test: testDeleteAfterUnzip())
-    Assert.assertTrue(out.exists());
+    Assertions.assertTrue(out.exists());
     FileUtils.deleteQuietly(out);
     FileUtils.deleteQuietly(destination);
   }
@@ -134,7 +130,7 @@ public class ZipUtilTest{
   public void testZipToOtherNonExistingFolder() throws IOException{
     File out = new File(FileUtils.getTempDirectory(), "testZipToOtherFolder.zip");
     ZipUtils.zip(TMP_DIR, out);
-    Assert.assertTrue(out.exists());
+    Assertions.assertTrue(out.exists());
     File destination = new File("out_not_exist");
     destination.mkdirs();
     //unzip to current folder
@@ -144,7 +140,7 @@ public class ZipUtilTest{
     checkDirectoryStructure(destination);
 
     //out should exists as it is not deleted by default (related test: testDeleteAfterUnzip())
-    Assert.assertTrue(out.exists());
+    Assertions.assertTrue(out.exists());
     FileUtils.deleteQuietly(out);
     FileUtils.deleteQuietly(destination);
   }
@@ -153,7 +149,7 @@ public class ZipUtilTest{
   public void testZipWithBasePath() throws IOException{
     File out = new File(FileUtils.getTempDirectory(), "testZipWithBasePath.zip");
     ZipUtils.zip(TMP_DIR_WITH_BASE_PATH, TMP_DIR_WITH_BASE_PATH.getParentFile().getAbsolutePath(), out);
-    Assert.assertTrue(out.exists());
+    Assertions.assertTrue(out.exists());
     File destination = new File("out_with_base");
     destination.mkdirs();
     //unzip to current folder
@@ -174,7 +170,7 @@ public class ZipUtilTest{
       EMPTY_FILE,
       EMPTY_FOLDER,
       SUB_FOLDER}, TMP_DIR.getAbsolutePath(), out);
-    Assert.assertTrue(out.exists());
+    Assertions.assertTrue(out.exists());
     File destination = new File("out_with_single_files");
     destination.mkdirs();
     //unzip to current folder
@@ -187,37 +183,43 @@ public class ZipUtilTest{
     FileUtils.deleteQuietly(destination);
   }
 
-  @Test(expected = IllegalArgumentException.class)
+  @Test
   public void testZipFilesWithoutFilesArgument() throws IOException{
-    File out = new File(FileUtils.getTempDirectory(), "testZipFilesWithBasePath.zip");
-    ZipUtils.zip((File[]) null, TMP_DIR.getAbsolutePath(), out);
+    Assertions.assertThrows(IllegalArgumentException.class, () -> {
+      File out = new File(FileUtils.getTempDirectory(), "testZipFilesWithBasePath.zip");
+      ZipUtils.zip((File[]) null, TMP_DIR.getAbsolutePath(), out);
+    });
   }
 
-  @Test(expected = IllegalArgumentException.class)
+  @Test
   public void testZipFilesWithoutBasePathArgument() throws IOException{
-    File out = new File(FileUtils.getTempDirectory(), "testZipFilesWithBasePath.zip");
-    ZipUtils.zip(new File[]{TEST_FILE,
-      UNICODE_FILE,
-      EMPTY_FILE,
-      EMPTY_FOLDER,
-      SUB_FOLDER}, null, out);
+    Assertions.assertThrows(IllegalArgumentException.class, () -> {
+      File out = new File(FileUtils.getTempDirectory(), "testZipFilesWithBasePath.zip");
+      ZipUtils.zip(new File[]{TEST_FILE,
+              UNICODE_FILE,
+              EMPTY_FILE,
+              EMPTY_FOLDER,
+              SUB_FOLDER}, null, out);
+    });
   }
 
-  @Test(expected = IllegalArgumentException.class)
+  @Test
   public void testZipFilesWithoutDestinationArgument() throws IOException{
-    File out = new File(FileUtils.getTempDirectory(), "testZipFilesWithBasePath.zip");
-    ZipUtils.zip(new File[]{TEST_FILE,
-      UNICODE_FILE,
-      EMPTY_FILE,
-      EMPTY_FOLDER,
-      SUB_FOLDER}, TMP_DIR.getAbsolutePath(), (File) null);
+    Assertions.assertThrows(IllegalArgumentException.class, () -> {
+      File out = new File(FileUtils.getTempDirectory(), "testZipFilesWithBasePath.zip");
+      ZipUtils.zip(new File[]{TEST_FILE,
+              UNICODE_FILE,
+              EMPTY_FILE,
+              EMPTY_FOLDER,
+              SUB_FOLDER}, TMP_DIR.getAbsolutePath(), (File) null);
+    });
   }
 
   @Test
   public void testDeleteAfterUnzip() throws IOException{
     File out = new File(FileUtils.getTempDirectory(), "testZipToOtherFolder.zip");
     ZipUtils.zip(TMP_DIR, out);
-    Assert.assertTrue(out.exists());
+    Assertions.assertTrue(out.exists());
     File destination = new File("out");
     destination.mkdirs();
     //unzip to current folder
@@ -226,7 +228,7 @@ public class ZipUtilTest{
 
     checkDirectoryStructure(destination);
 
-    Assert.assertFalse(out.exists());
+    Assertions.assertFalse(out.exists());
     FileUtils.deleteQuietly(destination);
   }
 
@@ -234,14 +236,14 @@ public class ZipUtilTest{
   public void testDeleteAfterUnzipWithoutDestination() throws IOException{
     File out = new File(FileUtils.getTempDirectory(), "testZipToOtherFolder.zip");
     ZipUtils.zip(TMP_DIR, out);
-    Assert.assertTrue(out.exists());
+    Assertions.assertTrue(out.exists());
     //unzip to current folder
 
     ZipUtils.unzip(out, true);
 
     checkDirectoryStructure(out.getParentFile());
 
-    Assert.assertFalse(out.exists());
+    Assertions.assertFalse(out.exists());
     FileUtils.deleteQuietly(new File(out.getParentFile(), TEST_FILE_NAME));
     FileUtils.deleteQuietly(new File(out.getParentFile(), UNICODE_FILE_NAME));
     FileUtils.deleteQuietly(new File(out.getParentFile(), EMPTY_FILE_NAME));
@@ -254,7 +256,7 @@ public class ZipUtilTest{
     File out = new File(FileUtils.getTempDirectory(), "testZipDirectory.zip");
     //only zip text files (test dataset should contain one of them)
     ZipUtils.zipDirectory(TMP_DIR, out, "txt");
-    Assert.assertTrue(out.exists());
+    Assertions.assertTrue(out.exists());
     File destination = new File("out");
     destination.mkdirs();
     //unzip to current folder
@@ -262,10 +264,10 @@ public class ZipUtilTest{
     ZipUtils.unzip(out, destination, true);
 
     //check text file
-    Assert.assertTrue(new File(destination, TEST_FILE_NAME).exists());
+    Assertions.assertTrue(new File(destination, TEST_FILE_NAME).exists());
     //check if non-text files does not exist
-    Assert.assertFalse(new File(destination, UNICODE_FILE_NAME).exists());
-    Assert.assertFalse(new File(destination, EMPTY_FILE_NAME).exists());
+    Assertions.assertFalse(new File(destination, UNICODE_FILE_NAME).exists());
+    Assertions.assertFalse(new File(destination, EMPTY_FILE_NAME).exists());
 
     FileUtils.deleteQuietly(out);
     FileUtils.deleteQuietly(destination);
@@ -276,7 +278,7 @@ public class ZipUtilTest{
     File out = new File(FileUtils.getTempDirectory(), "testZipDirectory.zip");
     //only zip text files (test dataset should contain one of them)
     ZipUtils.zipDirectory(TMP_DIR, out, (String[])null);
-    Assert.assertTrue(out.exists());
+    Assertions.assertTrue(out.exists());
     File destination = new File("out");
     destination.mkdirs();
     //unzip to current folder
@@ -296,49 +298,53 @@ public class ZipUtilTest{
     //only zip text files (test dataset should contain two of them)
     ZipUtils.zipSingleFile(TEST_FILE, out);
     File outFile = new File(out, TEST_FILE_NAME + ".zip");
-    Assert.assertTrue(outFile.exists());
-    Assert.assertTrue(outFile.length() > 1);
+    Assertions.assertTrue(outFile.exists());
+    Assertions.assertTrue(outFile.length() > 1);
 
     FileUtils.deleteQuietly(outFile);
   }
 
-  @Test(expected = IOException.class)
-  @Ignore("Not working if run as privileged user")
-  public void testZipWithIOException() throws IOException{
-    File outDir = new File(FileUtils.getTempDirectory(), "myFolder");
-    if(!outDir.exists()){
-      outDir.mkdirs();
-    }
-    outDir.setWritable(true);
-    File out = new File(outDir, "testZipToCurrentFolder.zip");
+  @Test
+  @Disabled("Not working if run as privileged user")
+  public void testZipWithIOException() throws IOException {
+    Assertions.assertThrows(IOException.class, () -> {
+      File outDir = new File(FileUtils.getTempDirectory(), "myFolder");
+      if (!outDir.exists()) {
+        outDir.mkdirs();
+      }
+      outDir.setWritable(true);
+      File out = new File(outDir, "testZipToCurrentFolder.zip");
 
-    out.setWritable(false);
-    outDir.setExecutable(false);
-    try{
-      ZipUtils.zip(TMP_DIR, out);
-    } finally{
-      out.setWritable(true);
-      outDir.setExecutable(true);
-      FileUtils.deleteQuietly(outDir);
-    }
+      out.setWritable(false);
+      outDir.setExecutable(false);
+      try {
+        ZipUtils.zip(TMP_DIR, out);
+      } finally {
+        out.setWritable(true);
+        outDir.setExecutable(true);
+        FileUtils.deleteQuietly(outDir);
+      }
+    });
   }
 
-  @Test(expected = IOException.class)
-  public void testZipWithRuntimeException() throws IOException{
-    ZipUtils.zip(new File[]{TEST_FILE,
-      UNICODE_FILE,
-      EMPTY_FILE,
-      EMPTY_FOLDER,
-      SUB_FOLDER}, TMP_DIR.getAbsolutePath(), (ZipOutputStream) null);
+  @Test
+  public void testZipWithRuntimeException() throws IOException {
+    Assertions.assertThrows(IOException.class, () -> {
+      ZipUtils.zip(new File[]{TEST_FILE,
+              UNICODE_FILE,
+              EMPTY_FILE,
+              EMPTY_FOLDER,
+              SUB_FOLDER}, TMP_DIR.getAbsolutePath(), (ZipOutputStream) null);
+    });
   }
 
   private static void checkDirectoryStructure(File location){
-    Assert.assertTrue(new File(location, TEST_FILE_NAME).exists());
-    Assert.assertTrue(new File(location, UNICODE_FILE_NAME).exists());
-    Assert.assertTrue(new File(location, EMPTY_FILE_NAME).exists());
-    Assert.assertTrue(new File(location, EMPTY_FOLDER_NAME).exists());
-    Assert.assertTrue(new File(location, SUB_FOLDER_NAME).exists());
-    Assert.assertTrue(new File(location, SUB_FOLDER_NAME + "/" + TEST_FILE_NAME).exists());
+    Assertions.assertTrue(new File(location, TEST_FILE_NAME).exists());
+    Assertions.assertTrue(new File(location, UNICODE_FILE_NAME).exists());
+    Assertions.assertTrue(new File(location, EMPTY_FILE_NAME).exists());
+    Assertions.assertTrue(new File(location, EMPTY_FOLDER_NAME).exists());
+    Assertions.assertTrue(new File(location, SUB_FOLDER_NAME).exists());
+    Assertions.assertTrue(new File(location, SUB_FOLDER_NAME + "/" + TEST_FILE_NAME).exists());
   }
 
 }

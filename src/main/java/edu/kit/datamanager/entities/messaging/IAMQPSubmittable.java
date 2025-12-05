@@ -15,8 +15,8 @@
  */
 package edu.kit.datamanager.entities.messaging;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import tools.jackson.databind.ObjectMapper;
+import tools.jackson.core.JacksonException;
 
 /**
  *
@@ -26,7 +26,7 @@ public interface IAMQPSubmittable{
 
   void validate();
 
-  default String toJson() throws JsonProcessingException{
+  default String toJson() throws JacksonException{
     validate();
     return new ObjectMapper().writeValueAsString(this);
   }

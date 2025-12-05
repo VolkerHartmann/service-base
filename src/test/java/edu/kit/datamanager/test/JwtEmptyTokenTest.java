@@ -17,8 +17,8 @@ package edu.kit.datamanager.test;
 
 import edu.kit.datamanager.security.filter.JwtAuthenticationToken;
 import edu.kit.datamanager.security.filter.JwtEmptyToken;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 /**
  *
@@ -29,14 +29,14 @@ public class JwtEmptyTokenTest{
   @Test
   public void testEmptyToken(){
     JwtEmptyToken token = new JwtEmptyToken("test123");
-    Assert.assertArrayEquals(token.getSupportedClaims(), new String[0]);
-    Assert.assertEquals(token.getClassForClaim("123"), Object.class);
-    Assert.assertEquals(token.getTokenType(), JwtAuthenticationToken.TOKEN_TYPE.USER);
+    Assertions.assertArrayEquals(token.getSupportedClaims(), new String[0]);
+    Assertions.assertEquals(token.getClassForClaim("123"), Object.class);
+    Assertions.assertEquals(token.getTokenType(), JwtAuthenticationToken.TOKEN_TYPE.USER);
 
     //should not do anything
     int hash = token.hashCode();
     token.setValueFromClaim("something", "another thing");
-    Assert.assertEquals(hash, token.hashCode());
+    Assertions.assertEquals(hash, token.hashCode());
 
     //should work aka. do nothing
     token.validate();

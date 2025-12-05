@@ -15,26 +15,26 @@
  */
 package edu.kit.datamanager.test;
 
-import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.core.JsonParser;
 import edu.kit.datamanager.util.json.CustomInstantDeserializer;
 import edu.kit.datamanager.util.json.CustomInstantSerializer;
-import java.time.Instant;
-import java.time.format.DateTimeParseException;
-import org.junit.Assert;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
+import tools.jackson.core.JsonGenerator;
+import tools.jackson.core.JsonParser;
+import tools.jackson.core.exc.JacksonIOException;
+
+import java.time.Instant;
+
+import static org.mockito.Mockito.*;
 
 /**
  *
  * @author jejkal
  */
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class CustomInstantSerializationTest {
 
     @Mock
@@ -56,7 +56,7 @@ public class CustomInstantSerializationTest {
         Instant start = Instant.ofEpochMilli(0);
         when(pars.getText()).thenReturn("1970-01-01T00:00:00Z");
         Instant inst = new CustomInstantDeserializer().deserialize(pars, null);
-        Assert.assertEquals(inst, start);
+        Assertions.assertEquals(inst, start);
     }
 
     @Test
@@ -64,7 +64,7 @@ public class CustomInstantSerializationTest {
         Instant start = Instant.ofEpochMilli(0);
         when(pars.getText()).thenReturn("1970");
         Instant inst = new CustomInstantDeserializer().deserialize(pars, null);
-        Assert.assertEquals(inst, start);
+        Assertions.assertEquals(inst, start);
     }
 
     @Test
@@ -72,7 +72,7 @@ public class CustomInstantSerializationTest {
         Instant start = Instant.ofEpochMilli(0);
         when(pars.getText()).thenReturn("1970-01");
         Instant inst = new CustomInstantDeserializer().deserialize(pars, null);
-        Assert.assertEquals(inst, start);
+        Assertions.assertEquals(inst, start);
     }
     
     @Test
@@ -80,7 +80,7 @@ public class CustomInstantSerializationTest {
         Instant start = Instant.ofEpochMilli(0);
         when(pars.getText()).thenReturn("1970-01-01");
         Instant inst = new CustomInstantDeserializer().deserialize(pars, null);
-        Assert.assertEquals(inst, start);
+        Assertions.assertEquals(inst, start);
     }
 
     @Test
@@ -93,20 +93,22 @@ public class CustomInstantSerializationTest {
     public void testNullDeserialization() throws Exception {
         when(pars.getText()).thenReturn(null);
         Instant inst = new CustomInstantDeserializer().deserialize(pars, null);
-        Assert.assertNull(inst);
+        Assertions.assertNull(inst);
     }
 
     @Test
     public void testEmptyDeserialization() throws Exception {
         when(pars.getText()).thenReturn("");
         Instant inst = new CustomInstantDeserializer().deserialize(pars, null);
-        Assert.assertNull(inst);
+        Assertions.assertNull(inst);
     }
 
-    @Test(expected = DateTimeParseException.class)
+    @Test
     public void testInvalidDeserializationInput() throws Exception {
+      Assertions.assertThrows(JacksonIOException.class, () -> {
         when(pars.getText()).thenReturn("no-instant");
         Instant inst = new CustomInstantDeserializer().deserialize(pars, null);
+      });
     }
 
 }

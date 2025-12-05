@@ -18,8 +18,8 @@ package edu.kit.datamanager.test;
 import edu.kit.datamanager.entities.BaseEnum;
 import edu.kit.datamanager.util.EnumUtils;
 import java.util.Objects;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 /**
  *
@@ -44,20 +44,20 @@ public class EnumUtilsTest{
 
   @Test
   public void testEquals(){
-    Assert.assertTrue(EnumUtils.equals(TEST_ENUM.FIRST, TEST_ENUM.FIRST));
-    Assert.assertFalse(EnumUtils.equals(TEST_ENUM.FIRST, TEST_ENUM.SECOND));
-    Assert.assertFalse(EnumUtils.equals(null, TEST_ENUM.SECOND));
-    Assert.assertFalse(EnumUtils.equals(TEST_ENUM.FIRST, null));
-    Assert.assertTrue(EnumUtils.equals(null, null));
+    Assertions.assertTrue(EnumUtils.equals(TEST_ENUM.FIRST, TEST_ENUM.FIRST));
+    Assertions.assertFalse(EnumUtils.equals(TEST_ENUM.FIRST, TEST_ENUM.SECOND));
+    Assertions.assertFalse(EnumUtils.equals(null, TEST_ENUM.SECOND));
+    Assertions.assertFalse(EnumUtils.equals(TEST_ENUM.FIRST, null));
+    Assertions.assertTrue(EnumUtils.equals(null, null));
   }
 
   @Test
   public void testHashCode(){
-    Assert.assertEquals(EnumUtils.hashCode(TEST_ENUM.FIRST), Objects.hashCode("first"));
+    Assertions.assertEquals(EnumUtils.hashCode(TEST_ENUM.FIRST), Objects.hashCode("first"));
   }
 
   @Test
   public void testHashCodeForNullValue(){
-    Assert.assertEquals(EnumUtils.hashCode(null), Objects.hashCode(null));
+    Assertions.assertEquals(EnumUtils.hashCode(null), Objects.hashCode(null));
   }
 }

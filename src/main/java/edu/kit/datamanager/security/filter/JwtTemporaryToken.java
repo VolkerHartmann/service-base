@@ -15,14 +15,14 @@
  */
 package edu.kit.datamanager.security.filter;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import edu.kit.datamanager.entities.PERMISSION;
 import edu.kit.datamanager.exceptions.InvalidAuthenticationException;
-import java.io.IOException;
-import java.util.Collection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.GrantedAuthority;
+import tools.jackson.databind.ObjectMapper;
+
+import java.util.Collection;
 
 /**
  *
@@ -89,11 +89,11 @@ public class JwtTemporaryToken extends JwtAuthenticationToken{
       throw new InvalidAuthenticationException("Mandatory claim 'permissions' has value 'null'.");
     }
     ObjectMapper mapper = new ObjectMapper();
-    try{
+//    try{
       scopedPermissions = mapper.readValue(value, ScopedPermission[].class);
-    } catch(IOException ex){
-      throw new InvalidAuthenticationException("Failed to read scoped permissions from claim value " + value + ".");
-    }
+//    } catch(IOException ex){
+//      throw new InvalidAuthenticationException("Failed to read scoped permissions from claim value " + value + ".");
+//    }
   }
 
   public ScopedPermission[] getScopedPermissions(){

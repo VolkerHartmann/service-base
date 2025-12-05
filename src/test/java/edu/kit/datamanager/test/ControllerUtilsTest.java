@@ -16,32 +16,25 @@
 package edu.kit.datamanager.test;
 
 import edu.kit.datamanager.entities.RepoUserRole;
-import edu.kit.datamanager.exceptions.AccessForbiddenException;
-import edu.kit.datamanager.exceptions.BadArgumentException;
-import edu.kit.datamanager.exceptions.EtagMismatchException;
-import edu.kit.datamanager.exceptions.EtagMissingException;
-import edu.kit.datamanager.exceptions.RangeNotSatisfyableException;
-import edu.kit.datamanager.exceptions.UnauthorizedAccessException;
+import edu.kit.datamanager.exceptions.*;
 import edu.kit.datamanager.security.filter.JwtAuthenticationToken;
 import edu.kit.datamanager.util.ControllerUtils;
-import java.net.Inet4Address;
-import java.net.InetAddress;
-import java.security.Principal;
-import java.util.Iterator;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Optional;
-import org.junit.Assert;
-import org.junit.Test;
-import org.mockito.MockedStatic;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.context.request.WebRequest;
+
+import java.net.InetAddress;
+import java.security.Principal;
+import java.util.Iterator;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Optional;
 
 /**
  *
@@ -57,9 +50,9 @@ public class ControllerUtilsTest {
         PageRequest request = PageRequest.of(0, 10, Sort.unsorted());
         request = ControllerUtils.checkPaginationInformation(request);
 
-        Assert.assertEquals(0, request.getPageNumber());
-        Assert.assertEquals(10, request.getPageSize());
-        Assert.assertEquals(Sort.unsorted(), request.getSort());
+        Assertions.assertEquals(0, request.getPageNumber());
+        Assertions.assertEquals(10, request.getPageSize());
+        Assertions.assertEquals(Sort.unsorted(), request.getSort());
     }
 
     @Test
@@ -67,9 +60,9 @@ public class ControllerUtilsTest {
         PageRequest request = PageRequest.of(0, 101, Sort.unsorted());
         request = ControllerUtils.checkPaginationInformation(request);
 
-        Assert.assertEquals(0, request.getPageNumber());
-        Assert.assertEquals(100, request.getPageSize());
-        Assert.assertEquals(Sort.unsorted(), request.getSort());
+        Assertions.assertEquals(0, request.getPageNumber());
+        Assertions.assertEquals(100, request.getPageSize());
+        Assertions.assertEquals(Sort.unsorted(), request.getSort());
     }
 
     @Test
@@ -77,9 +70,9 @@ public class ControllerUtilsTest {
         PageRequest request = PageRequest.of(0, 100, Sort.unsorted());
         request = ControllerUtils.checkPaginationInformation(request);
 
-        Assert.assertEquals(0, request.getPageNumber());
-        Assert.assertEquals(100, request.getPageSize());
-        Assert.assertEquals(Sort.unsorted(), request.getSort());
+        Assertions.assertEquals(0, request.getPageNumber());
+        Assertions.assertEquals(100, request.getPageSize());
+        Assertions.assertEquals(Sort.unsorted(), request.getSort());
     }
 
     @Test
@@ -87,9 +80,9 @@ public class ControllerUtilsTest {
         PageRequest request = PageRequest.of(0, 99, Sort.unsorted());
         request = ControllerUtils.checkPaginationInformation(request);
 
-        Assert.assertEquals(0, request.getPageNumber());
-        Assert.assertEquals(99, request.getPageSize());
-        Assert.assertEquals(Sort.unsorted(), request.getSort());
+        Assertions.assertEquals(0, request.getPageNumber());
+        Assertions.assertEquals(99, request.getPageSize());
+        Assertions.assertEquals(Sort.unsorted(), request.getSort());
     }
 
     @Test
@@ -97,89 +90,93 @@ public class ControllerUtilsTest {
         PageRequest request = PageRequest.of(0, 10, Sort.by("id"));
         request = ControllerUtils.checkPaginationInformation(request);
 
-        Assert.assertEquals(0, request.getPageNumber());
-        Assert.assertEquals(10, request.getPageSize());
-        Assert.assertEquals(Sort.by("id"), request.getSort());
+        Assertions.assertEquals(0, request.getPageNumber());
+        Assertions.assertEquals(10, request.getPageSize());
+        Assertions.assertEquals(Sort.by("id"), request.getSort());
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testCheckPaginationInformationWithInvalidPageable() {
+      Assertions.assertThrows(IllegalArgumentException.class, () -> {
         PageRequest request = ControllerUtils.checkPaginationInformation(new Pageable() {
-            @Override
-            public int getPageNumber() {
-                return -1;
-            }
+          @Override
+          public int getPageNumber() {
+            return -1;
+          }
 
-            @Override
-            public int getPageSize() {
-                return 10;
-            }
+          @Override
+          public int getPageSize() {
+            return 10;
+          }
 
-            @Override
-            public long getOffset() {
-                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-            }
+          @Override
+          public long getOffset() {
+            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+          }
 
-            @Override
-            public Sort getSort() {
-                return Sort.unsorted();
-            }
+          @Override
+          public Sort getSort() {
+            return Sort.unsorted();
+          }
 
-            @Override
-            public Pageable next() {
-                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-            }
+          @Override
+          public Pageable next() {
+            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+          }
 
-            @Override
-            public Pageable previousOrFirst() {
-                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-            }
+          @Override
+          public Pageable previousOrFirst() {
+            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+          }
 
-            @Override
-            public Pageable first() {
-                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-            }
+          @Override
+          public Pageable first() {
+            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+          }
 
-            @Override
-            public boolean hasPrevious() {
-                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-            }
+          @Override
+          public boolean hasPrevious() {
+            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+          }
 
-            @Override
-            public boolean isPaged() {
-                return Pageable.super.isPaged(); //To change body of generated methods, choose Tools | Templates.
-            }
+          @Override
+          public boolean isPaged() {
+            return Pageable.super.isPaged(); //To change body of generated methods, choose Tools | Templates.
+          }
 
-            @Override
-            public boolean isUnpaged() {
-                return Pageable.super.isUnpaged(); //To change body of generated methods, choose Tools | Templates.
-            }
+          @Override
+          public boolean isUnpaged() {
+            return Pageable.super.isUnpaged(); //To change body of generated methods, choose Tools | Templates.
+          }
 
-            @Override
-            public Sort getSortOr(Sort sort) {
-                return Pageable.super.getSortOr(sort); //To change body of generated methods, choose Tools | Templates.
-            }
+          @Override
+          public Sort getSortOr(Sort sort) {
+            return Pageable.super.getSortOr(sort); //To change body of generated methods, choose Tools | Templates.
+          }
 
-            @Override
-            public Pageable withPage(int pageNumber) {
-                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-            }
+          @Override
+          public Pageable withPage(int pageNumber) {
+            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+          }
 
-            @Override
-            public Optional<Pageable> toOptional() {
-                return Pageable.super.toOptional(); //To change body of generated methods, choose Tools | Templates.
-            }
+          @Override
+          public Optional<Pageable> toOptional() {
+            return Pageable.super.toOptional(); //To change body of generated methods, choose Tools | Templates.
+          }
         });
 
-        Assert.fail("Test should have already failed but created page request " + request);
+        Assertions.fail("Test should have already failed but created page request " + request);
+      });
     }
 
-    @Test(expected = UnauthorizedAccessException.class)
+    @Test
     public void testCheckAnonymousTrue() {
+      Assertions.assertThrows(UnauthorizedAccessException.class, () -> {
         Mockito.when(securityContext.getAuthentication()).thenReturn((JwtAuthenticationToken) null);
         SecurityContextHolder.setContext(securityContext);
 
         ControllerUtils.checkAnonymousAccess();
+      });
     }
 
     @Test
@@ -211,8 +208,9 @@ public class ControllerUtilsTest {
         ControllerUtils.checkAdministratorAccess();
     }
 
-    @Test(expected = AccessForbiddenException.class)
+    @Test
     public void testCheckAdministratorAccessFalse() {
+      Assertions.assertThrows(AccessForbiddenException.class, () -> {
         JwtAuthenticationToken userToken = edu.kit.datamanager.util.JwtBuilder.
                 createUserToken("tester", RepoUserRole.USER).
                 addSimpleClaim("firstname", "test").
@@ -223,6 +221,7 @@ public class ControllerUtilsTest {
         Mockito.when(securityContext.getAuthentication()).thenReturn(userToken);
         SecurityContextHolder.setContext(securityContext);
         ControllerUtils.checkAdministratorAccess();
+      });
     }
 
     @Test
@@ -230,94 +229,102 @@ public class ControllerUtilsTest {
         ControllerUtils.checkEtag(createDummyWebRequest(), () -> "1234");
     }
 
-    @Test(expected = EtagMismatchException.class)
+    @Test
     public void testCheckETagModified() {
+      Assertions.assertThrows(EtagMismatchException.class, () -> {
         ControllerUtils.checkEtag(createDummyWebRequest(), () -> "12343");
+      });
     }
 
-    @Test(expected = EtagMissingException.class)
+    @Test
     public void testCheckETagMissing() {
+      Assertions.assertThrows(EtagMissingException.class, () -> {
         ControllerUtils.checkEtag(createDummyWebRequest(false), () -> "12343");
+      });
     }
 
     @Test
     public void getGetLocalHostname() throws Exception {
-        Assert.assertEquals(InetAddress.getLocalHost().getHostName(), ControllerUtils.getLocalHostname());
+        Assertions.assertEquals(InetAddress.getLocalHost().getHostName(), ControllerUtils.getLocalHostname());
     }
 
     @Test
     public void testParseIdToLong() {
         Long id = ControllerUtils.parseIdToLong("1");
-        Assert.assertEquals(Long.valueOf(1l), id);
+        Assertions.assertEquals(Long.valueOf(1l), id);
     }
 
-    @Test(expected = BadArgumentException.class)
+    @Test
     public void testParseIdToLongFailing() {
+      Assertions.assertThrows(BadArgumentException.class, () -> {
         Long id = ControllerUtils.parseIdToLong("ab");
-        Assert.fail("Parsing should have been failed before but returned " + id);
+        Assertions.fail("Parsing should have been failed before but returned " + id);
+      });
     }
 
     @Test
     public void testGetContentRangeHeaderExactFit() {
         String contentRangeHeader = ControllerUtils.getContentRangeHeader(0, 10, 10);
-        Assert.assertEquals("0-9/10", contentRangeHeader);
+        Assertions.assertEquals("0-9/10", contentRangeHeader);
     }
 
     @Test
     public void testGetContentRangeHeaderWrongTotalElements() {
         String contentRangeHeader = ControllerUtils.getContentRangeHeader(0, 10, 10);
-        Assert.assertNotEquals("0-9/9", contentRangeHeader);
+        Assertions.assertNotEquals("0-9/9", contentRangeHeader);
     }
 
     @Test
     public void testGetContentRangeHeaderNoResult() {
         String contentRangeHeader = ControllerUtils.getContentRangeHeader(0, 10, 0);
-        Assert.assertEquals("*/0", contentRangeHeader);
+        Assertions.assertEquals("*/0", contentRangeHeader);
     }
 
     @Test
     public void testGetContentRangeHeaderPageTwoNoResult() {
         String contentRangeHeader = ControllerUtils.getContentRangeHeader(1, 10, 0);
-        Assert.assertEquals("*/0", contentRangeHeader);
+        Assertions.assertEquals("*/0", contentRangeHeader);
     }
 
     @Test
     public void testGetContentRangeHeaderOneResult() {
         String contentRangeHeader = ControllerUtils.getContentRangeHeader(0, 10, 1);
-        Assert.assertEquals("0-0/1", contentRangeHeader);
+        Assertions.assertEquals("0-0/1", contentRangeHeader);
     }
 
     @Test
     public void testGetContentRangeHeaderTwoResult() {
         String contentRangeHeader = ControllerUtils.getContentRangeHeader(0, 10, 2);
-        Assert.assertEquals("0-1/2", contentRangeHeader);
+        Assertions.assertEquals("0-1/2", contentRangeHeader);
     }
 
     @Test
     public void testGetContentRangeHeaderElevenResultsPageTwo() {
         String contentRangeHeader = ControllerUtils.getContentRangeHeader(1, 10, 11);
-        Assert.assertEquals("10-10/11", contentRangeHeader);
+        Assertions.assertEquals("10-10/11", contentRangeHeader);
     }
 
-    @Test(expected = RangeNotSatisfyableException.class)
+    @Test
     public void testGetContentRangeHeaderBadRequest() {
+      Assertions.assertThrows(RangeNotSatisfyableException.class, () -> {
         ControllerUtils.getContentRangeHeader(1, 10, 1);
+      });
     }
 
     @Test
     public void testParseContentRangeHeaderWithResults() {
         String contentRangeHeader = ControllerUtils.getContentRangeHeader(0, 10, 11);
         ControllerUtils.ContentRange range = ControllerUtils.parseContentRangeHeader(contentRangeHeader);
-        Assert.assertEquals(0, range.getIndexStart());
-        Assert.assertEquals(9, range.getIndexEnd());
+        Assertions.assertEquals(0, range.getIndexStart());
+        Assertions.assertEquals(9, range.getIndexEnd());
     }
 
       @Test
     public void testParseContentRangeHeaderWithNoResults() {
         String contentRangeHeader = ControllerUtils.getContentRangeHeader(0, 10, 0);
         ControllerUtils.ContentRange range = ControllerUtils.parseContentRangeHeader(contentRangeHeader);
-        Assert.assertEquals(0, range.getIndexStart());
-        Assert.assertEquals(0, range.getIndexEnd());
+        Assertions.assertEquals(0, range.getIndexStart());
+        Assertions.assertEquals(0, range.getIndexEnd());
     }
     
     private WebRequest createDummyWebRequest() {

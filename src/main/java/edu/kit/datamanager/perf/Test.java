@@ -15,19 +15,18 @@
  */
 package edu.kit.datamanager.perf;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.github.fge.jackson.jsonpointer.JsonPointer;
-import com.github.fge.jsonpatch.JsonPatch;
-import com.github.fge.jsonpatch.JsonPatchOperation;
-import com.github.fge.jsonpatch.ReplaceOperation;
-import com.github.fge.jsonpatch.diff.JsonDiff;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import edu.kit.datamanager.util.json.JsonPatch;
+import edu.kit.datamanager.util.json.JsonPatchOperation;
+import edu.kit.datamanager.util.json.JsonPatchUtil;
 import lombok.Data;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.ObjectMapper;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 /**
  * Just for short tests.
@@ -41,9 +40,9 @@ public class Test {
 
   public static void main(String[] args) throws Exception {
 
-    if (true) {
-      return;
-    }
+    //if (true) {
+    //  return;
+    //}
     ObjectMapper mapper = new ObjectMapper();
 
     Entity toPatch = new Entity("SomeTitle", 0);
@@ -51,10 +50,10 @@ public class Test {
     toPatch.addListEntry("done");
     toPatch.addListEntry("!");
 
-    JsonPatchOperation op_replace = new ReplaceOperation(JsonPointer.of("title"), mapper.readTree(mapper.writeValueAsString("Test")));
+    JsonPatchOperation op_replace = new JsonPatchOperation(JsonPatchUtil.REPLACE_OP, "title", null, mapper.readTree(mapper.writeValueAsString("Test")));
     List<JsonPatchOperation> ops = new ArrayList<>();
     for (int i = 0; i < 100; i++) {
-      ops.add(new ReplaceOperation(JsonPointer.of("title"), mapper.readTree(mapper.writeValueAsString("Test" + i))));
+      ops.add(new JsonPatchOperation(JsonPatchUtil.REPLACE_OP, "title", null, mapper.readTree(mapper.writeValueAsString("Test" + i))));
     }
 
     //   JsonPatchOperation op_add = new ReplaceOperation(JsonPointer.of("list", "2"), mapper.readTree(mapper.writeValueAsString("?")));
@@ -64,18 +63,18 @@ public class Test {
     JsonNode resourceAsNode = mapper.convertValue(toPatch, JsonNode.class);
 
     long s = System.currentTimeMillis();
-    JsonNode patchedDataResourceAsNode = patch.apply(resourceAsNode);
+    JsonNode patchedDataResourceAsNode = JsonPatchUtil.applyPatch(resourceAsNode, patch);
     logger.info("Dur: " + (System.currentTimeMillis() - s));
 
     logger.info("Patched: " + patchedDataResourceAsNode);
 
     Entity updated = mapper.treeToValue(patchedDataResourceAsNode, Entity.class);
 
-    JsonPatch patchGenerated = JsonDiff.asJsonPatch(mapper.convertValue(toPatch, JsonNode.class), mapper.convertValue(updated, JsonNode.class));
+   // JsonPatch patchGenerated = JsonDiff.asJsonPatch(mapper.convertValue(toPatch, JsonNode.class), mapper.convertValue(updated, JsonNode.class));
 
     logger.info("Input: " + toPatch);
     logger.info("Output: " + updated);
-    logger.info("Patch: " + patchGenerated);
+    //logger.info("Patch: " + patchGenerated);
 
   }
 

@@ -15,21 +15,18 @@
  */
 package edu.kit.datamanager.validator;
 
+import jakarta.validation.ConstraintValidatorContext;
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang3.SystemUtils;
+import org.junit.jupiter.api.*;
+
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.file.Files;
-import jakarta.validation.ConstraintValidatorContext;
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.lang3.SystemUtils;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Assume;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
-import static org.junit.Assert.*;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  *
@@ -48,7 +45,7 @@ public class ExecutableFileValidatorTest {
   public ExecutableFileValidatorTest() {
   }
 
-  @BeforeClass
+  @BeforeAll
   public static void setUpClass() throws IOException {
     TMP_FILE = Files.createTempFile("executableFileValidator", "test").toFile();
     TMP_FILE.setExecutable(true);
@@ -58,17 +55,17 @@ public class ExecutableFileValidatorTest {
     NOT_EXECUTABLE_FILE = TMP_FILE2.toURI().toURL();
   }
   
-  @AfterClass
+  @AfterAll
   public static void tearDownClass() {
     FileUtils.deleteQuietly(TMP_FILE);
     FileUtils.deleteQuietly(TMP_FILE2);
   }
   
-  @Before
+  @BeforeEach
   public void setUp() {
   }
   
-  @After
+  @AfterEach
   public void tearDown() {
   }
 
@@ -118,7 +115,10 @@ public class ExecutableFileValidatorTest {
   @Test
   public void testIsNotExecutable() throws MalformedURLException {
     System.out.println("testIsNotExecutable");
-    Assume.assumeFalse("Skip test on windows systems", SystemUtils.IS_OS_WINDOWS);
+    Assumptions.assumingThat(SystemUtils.IS_OS_WINDOWS, () -> {
+      System.out.println("Skipping test on Windows as executable flag is not supported.");
+      return;
+    });
     URL value = NOT_EXECUTABLE_FILE;
     ConstraintValidatorContext context = null;
     ExecutableFileValidator instance = new ExecutableFileValidator();

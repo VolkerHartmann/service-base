@@ -17,8 +17,8 @@ package edu.kit.datamanager.test;
 
 import edu.kit.datamanager.util.FilenameUtils;
 import net.bytebuddy.utility.RandomString;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 /**
  *
@@ -29,24 +29,24 @@ public class FilenameUtilsTest{
   @Test
   public void testFullSetOfSpecialCharacters(){
     String filename = "%\\*/:<>?\\\\|+,;=[]";
-    Assert.assertEquals("%25%5C%2A%2F%3A%3C%3E%3F%5C%5C%7C%2B%2C%3B%3D%5B%5D", FilenameUtils.escapeStringAsFilename(filename));
+    Assertions.assertEquals("%25%5C%2A%2F%3A%3C%3E%3F%5C%5C%7C%2B%2C%3B%3D%5B%5D", FilenameUtils.escapeStringAsFilename(filename));
   }
 
   @Test
   public void testMaxLength(){
     String randomString = RandomString.make(512);
-    Assert.assertEquals(255, FilenameUtils.escapeStringAsFilename(randomString).length());
+    Assertions.assertEquals(255, FilenameUtils.escapeStringAsFilename(randomString).length());
   }
 
   @Test
   public void testFinalReplacement(){
     String t = ".(?=.*.)";
-    Assert.assertEquals("%2E(%3F%3D%2E%2A.)", FilenameUtils.escapeStringAsFilename(t));
+    Assertions.assertEquals("%2E(%3F%3D%2E%2A.)", FilenameUtils.escapeStringAsFilename(t));
   }
 
   @Test
   public void testNoReplacement(){
     String t = "myFile.txt";
-    Assert.assertEquals("myFile.txt", FilenameUtils.escapeStringAsFilename(t));
+    Assertions.assertEquals("myFile.txt", FilenameUtils.escapeStringAsFilename(t));
   }
 }

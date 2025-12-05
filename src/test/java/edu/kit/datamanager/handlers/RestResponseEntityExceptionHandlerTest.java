@@ -18,8 +18,8 @@ package edu.kit.datamanager.handlers;
 import jakarta.persistence.EntityNotFoundException;
 import org.hibernate.HibernateException;
 import org.hibernate.exception.ConstraintViolationException;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
@@ -32,24 +32,24 @@ public class RestResponseEntityExceptionHandlerTest{
   @Test
   public void testHandleEntityNotFoundException(){
     ResponseEntity<Object> response = new RestResponseEntityExceptionHandler().handleEntityNotFound(new EntityNotFoundException("Not found"), null);
-    Assert.assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+    Assertions.assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
   }
 
   @Test
   public void testHandleConflict(){
     ResponseEntity<Object> response = new RestResponseEntityExceptionHandler().handleBadRequest(new RuntimeException("Conflict"), null);
-    Assert.assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+    Assertions.assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
   }
 
   @Test
   public void testHandleConstraintViolationException(){
     ResponseEntity<Object> response = new RestResponseEntityExceptionHandler().handleConstraintViolationException(new ConstraintViolationException("Conflict", null, "constraint name"), null);
-    Assert.assertEquals(HttpStatus.CONFLICT, response.getStatusCode());
+    Assertions.assertEquals(HttpStatus.CONFLICT, response.getStatusCode());
   }
 
   @Test
   public void testHandleHibernateException(){
     ResponseEntity<Object> response = new RestResponseEntityExceptionHandler().handleHibernateException(new HibernateException("Hibernate Exception"), null);
-    Assert.assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+    Assertions.assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
   }
 }
