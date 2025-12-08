@@ -15,7 +15,7 @@
  */
 package edu.kit.datamanager.controller;
 
-import com.github.fge.jsonpatch.JsonPatch;
+import edu.kit.datamanager.util.json.JsonPatch;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
