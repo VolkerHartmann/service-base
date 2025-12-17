@@ -78,7 +78,9 @@ dependencies {
     implementation "io.jsonwebtoken:jjwt-impl:0.13.0"
     implementation "io.jsonwebtoken:jjwt-jackson:0.13.0"
 
-    implementation "com.github.java-json-tools:json-patch:1.13"
+    // Json Util independent of Jackson version
+    //implementation "com.github.java-json-tools:json-patch:1.13"
+    implementation "edu.kit.datamanager:JsonPatch:1.0.0-SNAPSHOT"
    
     implementation "org.apache.commons:commons-lang3:3.19.0"
     implementation "commons-validator:commons-validator:1.10.0"

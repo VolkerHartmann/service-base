@@ -18,9 +18,11 @@ package edu.kit.datamanager.util;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.github.fge.jsonpatch.JsonPatch;
-import com.github.fge.jsonpatch.JsonPatchException;
+import edu.kit.datamanager.util.json.JsonPatch;
+import edu.kit.datamanager.util.json.JsonPatchUtil;
+import edu.kit.datamanager.util.json.exceptions.JsonPatchProcessingException;
 import edu.kit.datamanager.annotations.SecureUpdate;
 import edu.kit.datamanager.entities.PERMISSION;
 import edu.kit.datamanager.exceptions.PatchApplicationException;
@@ -49,14 +51,14 @@ public class PatchUtil {
     public static <C> C applyPatch(C resource, JsonPatch patch, Class<C> resourceClass, Collection<? extends GrantedAuthority> authorities) {
         ObjectMapper tmpObjectMapper = new ObjectMapper();
         tmpObjectMapper.registerModule(new JavaTimeModule());
-        JsonNode resourceAsNode = tmpObjectMapper.convertValue(resource, JsonNode.class);
         C updated;
         try {
+            // Convert patch to String (which is independent of any implementations of ObjectMapper)
+            String patchAsString = tmpObjectMapper.writeValueAsString(patch);
             // Apply the patch
-            JsonNode patchedDataResourceAsNode = patch.apply(resourceAsNode);
-            //convert resource back to POJO
-            updated = tmpObjectMapper.treeToValue(patchedDataResourceAsNode, resourceClass);
-        } catch (JsonPatchException | JsonProcessingException ex) {
+            //applyJsonPatch(T original, String patchAsString, Class<T> type, PatchOptions options
+            updated = JsonPatchUtil.applyPatch(resource, patchAsString , resourceClass);
+        } catch (JsonProcessingException | JsonPatchProcessingException ex) {
             LOGGER.error("Failed to apply patch '" + patch.toString() + " to resource " + resource, ex);
             throw new PatchApplicationException("Failed to apply patch to resource.");
         }
