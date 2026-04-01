@@ -15,10 +15,10 @@
  */
 package edu.kit.datamanager.util.json;
 
-import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonSerializer;
-import com.fasterxml.jackson.databind.SerializerProvider;
+import tools.jackson.core.JsonGenerator;
+import tools.jackson.core.JsonProcessingException;
+import tools.jackson.databind.JsonSerializer;
+import tools.jackson.databind.SerializerProvider;
 import java.io.IOException;
 import java.time.Instant;
 import java.time.ZoneOffset;

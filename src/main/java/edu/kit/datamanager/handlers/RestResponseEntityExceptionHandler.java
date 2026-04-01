@@ -37,6 +37,7 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
   @ExceptionHandler(value = {IllegalArgumentException.class, IllegalStateException.class})
   protected ResponseEntity<Object> handleBadRequest(RuntimeException ex, WebRequest request){
     String bodyOfResponse = "Request contained an illegal argument or caused an illegal state after modifying a resource.";
+    ex.printStackTrace();
     return handleExceptionInternal(ex, bodyOfResponse, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
   }
 
