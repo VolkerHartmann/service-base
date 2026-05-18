@@ -16,9 +16,9 @@
  */
 plugins { 
     id 'io.freefair.lombok' version '9.5.0'
-    id 'io.freefair.maven-publish-java' version '9.1.0'
+    id 'io.freefair.maven-publish-java' version '9.5.0'
     id 'io.spring.dependency-management' version '1.1.7'
-    id 'org.owasp.dependencycheck' version '12.1.9'
+    id 'org.owasp.dependencycheck' version '12.2.2'
     id 'java'
     id 'jacoco'
     // plugins for release and publishing to maven repo
@@ -30,7 +30,7 @@ plugins {
 
 ext { 
     springBootVersion = '3.5.8' 
-    springDocVersion  = '2.8.14'
+    springDocVersion  = '2.8.17'
 }
 
 description = "Base service module containing entities, interfaces and helpers."
@@ -57,7 +57,7 @@ dependencies {
     implementation "org.springframework.boot:spring-boot-starter-security"
     implementation "org.springframework.boot:spring-boot-starter-actuator"
     implementation "org.springframework.boot:spring-boot-starter-data-jpa"
-    implementation "org.springframework.cloud:spring-cloud-gateway-mvc:4.3.2"
+    implementation "org.springframework.cloud:spring-cloud-gateway-mvc:4.3.4"
 
     // springdoc
     implementation "org.springdoc:springdoc-openapi-starter-webmvc-ui:${springDocVersion}"
@@ -73,7 +73,7 @@ dependencies {
     implementation "com.github.dozermapper:dozer-core:7.0.0"
 
     //keycloak
-    implementation "com.nimbusds:nimbus-jose-jwt:10.6"
+    implementation "com.nimbusds:nimbus-jose-jwt:10.9"
     implementation "io.jsonwebtoken:jjwt-api:0.13.0"
     implementation "io.jsonwebtoken:jjwt-impl:0.13.0"
     implementation "io.jsonwebtoken:jjwt-jackson:0.13.0"
