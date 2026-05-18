@@ -73,7 +73,7 @@ dependencies {
     implementation "com.github.dozermapper:dozer-core:7.0.0"
 
     //keycloak
-    implementation "com.nimbusds:nimbus-jose-jwt:10.6"
+    implementation "com.nimbusds:nimbus-jose-jwt:10.9"
     implementation "io.jsonwebtoken:jjwt-api:0.13.0"
     implementation "io.jsonwebtoken:jjwt-impl:0.13.0"
     implementation "io.jsonwebtoken:jjwt-jackson:0.13.0"
