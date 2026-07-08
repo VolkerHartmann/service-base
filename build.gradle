@@ -95,7 +95,7 @@ dependencies {
     //Java 11 Support 
     implementation 'javax.xml.bind:jaxb-api:2.3.1'
     
-    implementation 'com.sun.xml.bind:jaxb-core:4.0.8'
+    implementation 'com.sun.xml.bind:jaxb-core:4.0.9'
     implementation 'com.sun.xml.bind:jaxb-impl:4.0.8'
 
     implementation 'javax.activation:activation:1.1.1'
