@@ -57,7 +57,7 @@ dependencies {
     implementation "org.springframework.boot:spring-boot-starter-security"
     implementation "org.springframework.boot:spring-boot-starter-actuator"
     implementation "org.springframework.boot:spring-boot-starter-data-jpa"
-    implementation "org.springframework.cloud:spring-cloud-gateway-mvc:4.3.4"
+    implementation "org.springframework.cloud:spring-cloud-gateway-mvc:4.3.5"
 
     // springdoc
     implementation "org.springdoc:springdoc-openapi-starter-webmvc-ui:${springDocVersion}"
